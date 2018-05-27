@@ -16,7 +16,7 @@ $linkColor : #1890ff;
 
   .account {
     &-content {
-      padding: 110px 0 25px;
+      padding: 100px 0 25px;
     }
 
     &-top {
@@ -40,8 +40,10 @@ $linkColor : #1890ff;
     }
 
     &-main {
-      width: 420px;
+      width: 100%;
+      max-width: 420px;
       margin: 0 auto;
+      padding: 0 15px;
     }
   }
 

@@ -9,22 +9,18 @@ Vue.use(Router);
 
 /* eslint-disable max-len */
 /*
- * router config
- * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
- *                                if not set alwaysShow, only more than one route under the children
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * 单个路由自定义配置
+ * hidden: true                   是否在 sidebar 显示. 默认 false
+ * alwaysShow: true               是否总是在一级菜单显示, 不管是否有子路由. 没有设置, 则只有子路由时才会在菜单中显示
+ * redirect: noredirect           redirect:noredirect 时,在面包屑中不会重定向
+ * name: 'router-name'            在 <keep-alive> 使用 (必须设置!!!)
  * meta : {
-     roles: ['admin','editor']    will control the page roles (you can set multiple roles),
-                                  if not set or empty, it mean all user can view.
-     title: 'title'               the name show in submenu and breadcrumb (recommend set)
-     icon: 'svg-name'             the icon show in the sidebar,
-     noCache: true                if true ,the page will no be cached(default is false)
+     roles: ['admin','editor']    控制页面可访问的角色. 为空表示所有用户都可以访问
+     title: 'title'               页面标题. 在子菜单 和 面包屑中显示 (推荐设置)
+     icon: 'svg-name'             sidebar 显示的图标名称
+     noCache: true                是否缓存页面. 默认是false
    }
  */
-
 // 静态路由. 不需要权限检测
 export const constantRouterMap = [
   {
@@ -36,10 +32,10 @@ export const constantRouterMap = [
       name: 'dashboard',
       component: importComp('dashboard/index'),
       meta: {
-        roles: ['admin', 'editor'],
-        title: 'dashboard',
-        icon: 'dashboard',
+        icon: 'home',
+        title: '控制台',
         noCache: true,
+        roles: ['admin', 'editor'],
       },
     }],
   },
@@ -148,6 +144,7 @@ export const asyncRouterMap = [
     name: 'clipboard',
     component: Layout,
     redirect: 'clipboard/index',
+    alwaysShow: true,
     meta: {
       title: '剪贴板',
       icon: 'clipboard',
@@ -158,17 +155,70 @@ export const asyncRouterMap = [
         name: 'clipboardDemo',
         component: importComp('clipboard/index'),
         meta: {
-          title: '点击复制',
-          icon: 'clipboard',
+          title: '剪贴板示例',
+        },
+      },
+    ],
+  },
+  {
+    path: '/auth',
+    name: '权限控制',
+    component: Layout,
+    redirect: 'auth/index',
+    meta: {
+      title: '权限控制',
+      icon: 'auth',
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'authDemo',
+        component: importComp('auth/index'),
+        meta: {
+          title: '所有用户可见',
+          desc: '不同权限的用户, 显示不同的菜单入口',
         },
       },
       {
-        path: 'index2',
-        name: 'clipboardDemo2',
-        component: importComp('clipboard/index'),
+        path: 'admin',
+        name: 'authAdmin',
+        component: importComp('auth/admin'),
         meta: {
-          title: '点击复制22',
-          icon: 'clipboard22',
+          title: '管理员可见',
+          roles: ['admin'],
+        },
+      },
+      {
+        path: 'editor',
+        name: 'authEditor',
+        component: importComp('auth/editor'),
+        meta: {
+          title: '运营编辑',
+          roles: ['editor'],
+        },
+      },
+      {
+        path: 'dev',
+        name: 'authDev',
+        component: importComp('auth/dev'),
+        meta: {
+          title: '开发者',
+          roles: ['dev'],
+        },
+      },
+    ],
+  },
+  {
+    path: '/i18n',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: importComp('i18n/index'),
+        name: 'i18n',
+        meta: {
+          title: 'i18n',
+          icon: 'international',
         },
       },
     ],

@@ -1,5 +1,5 @@
 import formatRoles from '@/utils/formatRoles';
-import { getToken, setToken } from '@/utils/auth';
+import { getToken, setToken, removeToken } from '@/utils/auth';
 
 // 模拟登录
 const mockLoginByUsername = (userInfo) => {
@@ -63,21 +63,30 @@ const mockLoginByUsername = (userInfo) => {
 
 const user = {
   state: {
+    info: {},
     roles: [],
     token: getToken(),
   },
   getters: {
+    account: state => state.info,
     roles: state => state.roles,
   },
   actions: {
+    // 退出登录
+    logOut({ commit }) {
+      return new Promise((resolve) => {
+        commit('REESET_STATE');
+        removeToken();
+        resolve();
+      });
+    },
     // 获取用户信息
-    /* eslint-disable no-console */
-    getUserInfo({ commit }) {
+    getAccount({ commit }) {
       return new Promise((resolve, reject) => {
         const token = getToken();
         let data = {};
 
-        console.log('getUserInfo', token);
+        console.log('getAccount', token);
 
         if (token === '123456' || token === 'admin') {
           data = {
@@ -109,14 +118,15 @@ const user = {
           reject('roles must be a non-null array !');
         }
 
-        console.log('获取用户信息 getUserInfo', data);
+        console.log('获取用户信息 getAccount', data);
+        commit('SET_ACCOUNT', data);
         resolve(data);
       });
     },
     // 用户名登录
-    async loginByUsername({ commit }, userInfo) {
+    loginByUsername({ commit }, account) {
       return new Promise((resolve, reject) => {
-        mockLoginByUsername(userInfo).then((res) => {
+        mockLoginByUsername(account).then((res) => {
           if (!res.data) {
             reject(res);
           }
@@ -132,11 +142,19 @@ const user = {
     },
   },
   mutations: {
+    SET_ACCOUNT: (state, account) => {
+      state.info = account;
+    },
     SET_ROLES: (state, roles) => {
       state.roles = roles;
     },
     SET_TOKEN: (state, token) => {
       state.token = token;
+    },
+    REESET_STATE: (state) => {
+      state.token = '';
+      state.roles = [];
+      state.token = getToken();
     },
   },
 };

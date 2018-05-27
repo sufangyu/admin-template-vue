@@ -4,27 +4,25 @@
       class="drawer-bg"
       v-if="device==='mobile' && sidebar.opened"
       @click="handleClickOutside"
-    ></div>
-    <sidebar class="sidebar-container"></sidebar>
-    <div class="main-container">
-      <navbar></navbar>
-      <tags-view></tags-view>
-      <app-main></app-main>
+    />
+    <sidebar class="app-layout-sidebar" />
+    <div class="app-layout-main">
+      <app-header />
+      <app-body />
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, TagsView } from './components';
+import { AppHeader, Sidebar, AppBody } from './components';
 import ResizeMixin from './mixin/ResizeHandler';
 
 export default {
   name: 'layout',
   components: {
-    Navbar,
+    AppHeader,
     Sidebar,
-    AppMain,
-    TagsView,
+    AppBody,
   },
   mixins: [ResizeMixin],
   computed: {
@@ -36,22 +34,28 @@ export default {
     },
     classObj() {
       return {
-        hideSidebar: !this.sidebar.opened,
-        'without-animation': this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
+        pad: this.device === 'pad',
+        desktop: this.device === 'desktop',
+        'hide-sidebar': !this.sidebar.opened,
+        'without-animation': this.sidebar.withoutAnimation,
       };
     },
   },
   methods: {
     handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false });
+      this.$store.dispatch('closeSidebar', { withoutAnimation: false });
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "src/styles/mixin.scss";
+@import "src/styles/var.scss";
+// $app-header-height : 64px;
+// $sidebar-width     : 236px;
+// $sidebar-width-min : 80px;
 
 .app-layout {
   @include clearfix;
@@ -59,6 +63,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
+  background: #f0f2f5;
 }
 .drawer-bg {
   background: rgba(0, 0, 0, 0.3);
@@ -67,5 +72,11 @@ export default {
   height: 100%;
   position: absolute;
   z-index: 999;
+}
+
+.app-layout-main {
+  height: 100%;
+  margin-left: $sidebar-width;
+  transition: margin-left .28s;
 }
 </style>

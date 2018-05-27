@@ -9,21 +9,23 @@ const app = {
       withoutAnimation: false,
     },
   },
-
   getters: {
     sidebar: state => state.sidebar,
     language: state => state.language,
     device: state => state.device,
   },
-
   actions: {
     // 切换 侧边菜单栏隐藏/显示
-    toggleSideBar({ commit }) {
+    toggleSidebar({ commit }) {
       commit('TOGGLE_SIDEBAR');
     },
     // 隐藏 侧边菜单栏
-    closeSideBar({ commit }, { withoutAnimation }) {
+    closeSidebar({ commit }, { withoutAnimation }) {
       commit('CLOSE_SIDEBAR', withoutAnimation);
+    },
+    // 显示 侧边菜单栏
+    openSidebar({ commit }, { withoutAnimation }) {
+      commit('OPEN_SIDEBAR', withoutAnimation);
     },
     // 切换 当前浏览器设备 mobile/desktop
     toggleDevice({ commit }, device) {
@@ -34,7 +36,6 @@ const app = {
       commit('SET_LANGUAGE', language);
     },
   },
-
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
       // sidebarStatus =>>  0: 显示; 1: 隐藏
@@ -49,6 +50,11 @@ const app = {
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
       Cookies.set('sidebarStatus', 1);
       state.sidebar.opened = false;
+      state.sidebar.withoutAnimation = withoutAnimation;
+    },
+    OPEN_SIDEBAR: (state, withoutAnimation) => {
+      Cookies.set('sidebarStatus', 0);
+      state.sidebar.opened = true;
       state.sidebar.withoutAnimation = withoutAnimation;
     },
     TOGGLE_DEVICE: (state, device) => {

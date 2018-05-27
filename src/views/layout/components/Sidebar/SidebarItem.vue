@@ -2,14 +2,13 @@
   <!-- eslint-disable max-len -->
   <div class="menu-wrapper">
     <template v-for="item in routes" v-if="!item.hidden && item.children">
-
       <router-link
         v-if="hasOneShowingChildren(item.children) && !item.children[0].children && !item.alwaysShow"
         :to="item.path + '/' + item.children[0].path"
         :key="item.children[0].name"
       >
         <el-menu-item :index="item.path + '/' + item.children[0].path" :class="{'submenu-title-no-dropdown':!isNest}">
-          <!-- <svg-icon v-if="item.children[0].meta&&item.children[0].meta.icon" :icon-class="item.children[0].meta.icon"></svg-icon> -->
+          <icon-svg v-if="item.children[0].meta && item.children[0].meta.icon" :name="item.children[0].meta.icon"></icon-svg>
           <span v-if="item.children[0].meta && item.children[0].meta.title" slot="title">
             {{item.children[0].meta.title}}
           </span>
@@ -18,7 +17,7 @@
 
       <el-submenu v-else :index="item.name || item.path" :key="item.name">
         <template slot="title">
-          <!-- <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon"></svg-icon> -->
+          <icon-svg v-if="item.meta && item.meta.icon" :name="item.meta.icon"></icon-svg>
           <span v-if="item.meta && item.meta.title" slot="title">
             {{item.meta.title}}
           </span>
@@ -33,7 +32,7 @@
           </sidebar-item>
           <router-link v-else :to="item.path+'/'+child.path" :key="child.name">
             <el-menu-item :index="item.path+'/'+child.path">
-              <!-- <svg-icon v-if="child.meta&&child.meta.icon" :icon-class="child.meta.icon"></svg-icon> -->
+              <icon-svg v-if="child.meta&&child.meta.icon" :name="child.meta.icon"></icon-svg>
               <span v-if="child.meta && child.meta.title" slot="title">
                 {{child.meta.title}}
               </span>
@@ -47,8 +46,10 @@
 </template>
 
 <script>
+import IconSvg from '@/components/IconSvg';
+
 export default {
-  name: 'SidebarItem',
+  name: 'sidebarItem',
   props: {
     routes: {
       type: Array,
@@ -57,6 +58,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  components: {
+    IconSvg,
   },
   methods: {
     hasOneShowingChildren(children) {

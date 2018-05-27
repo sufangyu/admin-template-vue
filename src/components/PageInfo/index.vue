@@ -1,19 +1,26 @@
 <template>
-  <div class="page-info" v-if="title">
-    <h1 class="title">{{title}}</h1>
-    <div class="desc" v-if="desc">{{desc}}</div>
+  <div class="page-info" v-if="resTitle || resDesc || resExtra">
+    <h1 class="title" v-if="resTitle">{{resTitle}}</h1>
+    <div class="desc" v-if="resDesc"><p>{{resDesc}}</p></div>
+    <div class="extra" slot="extra" v-if="resExtra">{{resExtra}}</div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    title: '',
+    desc: '',
+    extra: '',
+  },
   created() {
     this.getPageInfo();
   },
   data() {
     return {
-      title: '',
-      desc: '',
+      resTitle: '',
+      resDesc: '',
+      resExtra: '',
     };
   },
   watch: {
@@ -25,8 +32,9 @@ export default {
     getPageInfo() {
       const matched = this.$route.matched.filter(item => item.name);
       const first = matched[matched.length - 1].meta;
-      this.title = first.title || '';
-      this.desc = first.desc || '';
+      this.resTitle = first.title || this.title;
+      this.resDesc = first.desc || this.desc;
+      this.resExtra = first.extra || this.extra;
     },
   },
 };
@@ -45,6 +53,11 @@ export default {
     line-height: 1;
     color: rgba(0, 0, 0, .65);
     margin-bottom: 16px;
+
+    p {
+      margin: 0;
+      padding-bottom: 16px;
+    }
   }
 }
 </style>

@@ -58,7 +58,7 @@
             <i>微信</i>
             <i>支付宝</i>
           </div>
-          <div><router-link :to="{path: 'dashboard'}">注册账户</router-link></div>
+          <div><router-link :to="{path: 'register'}">注册账户</router-link></div>
         </div>
 
       </div>
@@ -107,7 +107,6 @@ export default {
       this.passwordType = this.passwordType === 'password' ? '' : 'password';
     },
     handleLogin() {
-      console.log(this.$router.replace);
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;

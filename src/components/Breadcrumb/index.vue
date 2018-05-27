@@ -1,5 +1,6 @@
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
+    <el-breadcrumb-item to="/">首页</el-breadcrumb-item>
     <transition-group name="breadcrumb">
       <el-breadcrumb-item
         v-for="(item, index) in levelList"
@@ -7,10 +8,18 @@
         v-if='item.meta.title'
       >
         <span
-          v-if='item.redirect==="noredirect" || index==levelList.length-1'
+          v-if='item.redirect === "noredirect" || index==levelList.length-1'
           class="no-redirect"
-        >{{item.meta.title}}</span>
-        <router-link v-else :to="item.redirect||item.path">{{item.meta.title}}</router-link>
+        >
+          {{item.meta.title}}
+        </span>
+        <router-link
+          v-else :to="item.redirect ? `/${item.redirect}` : item.path"
+          :data-redirect="item.redirect"
+          :data-path="item.path"
+        >
+          {{item.meta.title}}
+        </router-link>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -36,7 +45,8 @@ export default {
       let matched = this.$route.matched.filter(item => item.name);
       const first = matched[0];
       if (first && first.name !== 'dashboard') {
-        matched = [{ path: '/dashboard', meta: { title: 'dashboard' } }].concat(matched);
+        // matched = [{ path: '/dashboard', meta: { title: 'dashboard' } }].concat(matched);
+        matched = [].concat(matched);
       }
       this.levelList = matched;
     },
@@ -49,22 +59,29 @@ export default {
   display: inline-block;
   font-size: 14px;
   margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.45);
 
   .no-redirect {
-    color: #97a8be;
     cursor: text;
+    color: inherit;
+  }
+
+  .el-breadcrumb__inner,
+  .el-breadcrumb__inner a,
+  .el-breadcrumb__inner.is-link {
+    color: inherit;
+    font-weight: 400;
   }
 
   .el-breadcrumb__inner a,
   .el-breadcrumb__inner.is-link {
-    color: rgba(0, 0, 0, 0.45);
-    font-weight: 400;
+    &:hover {
+      color: #409EFF;
+    }
   }
 
-  .el-breadcrumb__inner a {
-    &:hover {
-      color: #409EFF
-    }
+  .el-breadcrumb__item:last-child {
+    color: #606266;
   }
 
 }
