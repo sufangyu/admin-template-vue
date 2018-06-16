@@ -55,10 +55,10 @@ $linkColor : #1890ff;
       cursor: pointer;
       user-select: none;
       position: absolute;
-      right: 0;
+      right: 20px;
       top: 50%;
       transform: translateY(-50%);
-      padding: 20px;
+      padding: 0 8px;
       opacity: 0.6;
       font-size: 12px;
     }
@@ -84,6 +84,7 @@ $linkColor : #1890ff;
     margin-bottom: 22px;
   }
   .code {
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-bottom: 0;
   }
 }

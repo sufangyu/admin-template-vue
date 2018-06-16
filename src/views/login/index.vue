@@ -9,16 +9,17 @@
         <el-form
           class="account-form"
           autoComplete="off"
-          :model="loginForm"
-          :rules="loginRules"
-          ref="loginForm"
+          :model="form"
+          :rules="rules"
+          ref="form"
+          status-icon
           label-position="left"
         >
           <el-form-item prop="username">
             <el-input
               name="username"
               type="text"
-              v-model="loginForm.username"
+              v-model="form.username"
               autoComplete="off"
               placeholder="用户名"
             />
@@ -29,7 +30,7 @@
               name="password"
               :type="passwordType"
               @keyup.enter.native="handleLogin"
-              v-model="loginForm.password"
+              v-model="form.password"
               placeholder="密码"
             />
             <span class="pwd-toggle" @click="togglePwd">
@@ -39,7 +40,7 @@
           </el-form-item>
 
           <div class="form-item-extra flex row-flex-middle row-flex-space-between">
-            <div><el-checkbox v-model="loginForm.autoLogin">自动登录</el-checkbox></div>
+            <div><el-checkbox v-model="form.autoLogin">自动登录</el-checkbox></div>
             <div><router-link :to="{path: 'findpass'}">忘记密码？</router-link></div>
           </div>
 
@@ -68,35 +69,25 @@
 </template>
 
 <script>
-/* eslint-disable no-console */
+import { validateMin } from '@/utils/validateRules';
+
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('用户名不能为空'));
-      } else {
-        callback();
-      }
-    };
-    const validatePassword = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('密码不能为空'));
-      } else if (value.trim().length < 6) {
-        callback(new Error('密码长度不能小于 6 位数'));
-      } else {
-        callback();
-      }
-    };
     return {
-      loginForm: {
+      form: {
         username: '',
         password: '',
         autoLogin: true,
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+      rules: {
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { validate: validateMin, min: 6, message: '密码长度不能小于6位数', trigger: 'blur' },
+        ],
       },
       passwordType: 'password',
       loading: false,
@@ -107,20 +98,20 @@ export default {
       this.passwordType = this.passwordType === 'password' ? '' : 'password';
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.form.validate(async (valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('loginByUsername', this.loginForm).then((res) => {
-            console.log('loginByUsername res', res);
+          try {
+            const res = await this.$store.dispatch('loginByUsername', this.form);
             this.loading = false;
+            console.log('loginByUsername res', res);
             const redirectUrl = this.$route.query.redirect ? decodeURIComponent(this.$route.query.redirect) : '/';
             this.$router.replace({ path: redirectUrl });
-          }).catch((err) => {
+          } catch (err) {
+            console.error('handleLogin err =>>', err);
             this.loading = false;
-            this.$message.error(err.message);
-          });
+          }
         }
-        return false;
       });
     },
   },

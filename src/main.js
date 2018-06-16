@@ -41,7 +41,6 @@ const requireAll = (requireContext) => {
 const req = require.context('@/assets/svg', true, /\.svg$/);
 requireAll(req);
 
-console.log(i18n);
 
 /* eslint-disable no-new */
 new Vue({

@@ -9,17 +9,17 @@
         <el-form
           class="account-form"
           autoComplete="off"
-          :model="loginForm"
-          :rules="loginRules"
-          ref="accountForm"
+          status-icon
+          :model="form"
+          :rules="rules"
+          ref="form"
           label-position="left"
         >
           <el-form-item prop="username">
             <el-input
               name="username"
               type="text"
-              v-model="loginForm.username"
-              autoComplete="on"
+              v-model="form.username"
               placeholder="用户名"
             />
           </el-form-item>
@@ -29,39 +29,50 @@
               name="password"
               :type="passwordType"
               @keyup.enter.native="handleLogin"
-              v-model="loginForm.password"
+              v-model="form.password"
               placeholder="至少6位密码，区分大小写"
             />
           </el-form-item>
 
-          <el-form-item prop="repassword">
+          <el-form-item prop="checkPassword">
             <el-input
-              name="repassword"
-              type="text"
-              v-model="loginForm.repassword"
+              name="checkPassword"
+              :type="passwordType"
+              v-model="form.checkPassword"
               placeholder="确认密码"
             />
           </el-form-item>
 
+          <el-form-item prop="mobile">
+            <el-input
+              name="mobile"
+              type="text"
+              v-model="form.mobile"
+              placeholder="手机号码"
+            />
+          </el-form-item>
+
           <div class="form-item-code flex row-flex-middle row-flex-space-between">
-            <div class="code flex-1" prop="code">
+            <el-form-item class="code flex-1" prop="code">
               <el-input
                 name="code"
                 type="text"
-                v-model="loginForm.code"
+                v-model="form.code"
                 placeholder="验证码"
               />
+            </el-form-item>
+            <div class="code-get">
+              <count-down @click.native="getSMSCode" :disabled="form.mobile ===''" />
             </div>
-            <div class="code-get"><el-button>获取验证码</el-button></div>
           </div>
 
           <div class="form-item-extra">
             <div>
-              <el-checkbox v-model="loginForm.agree">
+              <el-checkbox v-model="form.agree">
                 我已阅读并
                 <router-link :to="{path: 'document/101'}">同意服务协议</router-link>
                 和
-                <router-link :to="{path: 'document/101'}">隐私声明</router-link>
+                <router-link :to="{path: 'document/102'}">隐私声明</router-link>
               </el-checkbox>
             </div>
           </div>
@@ -70,7 +81,7 @@
             type="primary"
             style="width:100%;"
             :loading="loading"
-            @click.native.prevent="handleLogin"
+            @click.native.prevent="handleRegister"
           >{{'提交注册'}}</el-button>
         </el-form>
 
@@ -85,160 +96,83 @@
 </template>
 
 <script>
+import CountDown from '@/components/CountDown';
+import { validateMin, validateMobile } from '@/utils/validateRules';
+
 export default {
-  name: 'login',
+  name: 'register',
+  components: {
+    CountDown,
+  },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('Please enter the correct user name'));
-      } else {
-        callback();
-      }
-    };
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'));
+      if (value !== '') {
+        this.$refs.form.validateField('checkPassword');
+        callback();
+      }
+    };
+    const validateCheckPassword = (rule, value, callback) => {
+      if (value !== this.form.password) {
+        callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
       }
     };
+
     return {
-      loginForm: {
+      form: {
         username: '',
         password: '',
-        repassword: '',
-        agree: true,
+        checkPassword: '',
+        mobile: '',
+        code: '',
+        agree: false,
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+      rules: {
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { validator: validateMin, min: 6, message: '密码不能小于6位数', trigger: 'blur' },
+          { validator: validatePassword, trigger: 'blur' },
+        ],
+        checkPassword: [
+          { required: true, message: '再次确认密码', trigger: 'blur' },
+          { validator: validateMin, min: 6, message: '确认密码不能小于6位数', trigger: 'blur' },
+          { validator: validateCheckPassword, trigger: 'blur' },
+        ],
+        mobile: [
+          { required: true, message: '手机号码不能为空', trigger: 'blur' },
+          { validator: validateMobile, message: '手机号码格式有误', trigger: 'blur' },
+        ],
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
+        ],
       },
       passwordType: 'password',
       loading: false,
     };
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = '';
-      } else {
-        this.passwordType = 'password';
-      }
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
+    handleRegister() {
+      this.$refs.form.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            this.loading = false;
-            this.$router.push({ path: '/' });
-          }).catch(() => {
-            this.loading = false;
-          });
+          if (!this.form.agree) {
+            this.$message.error('请勾选同意协议');
+            return;
+          }
+
+          console.log('提交...');
         }
-        return false;
       });
+    },
+    getSMSCode() {
+      if (this.form.mobile === '') {
+        this.$message.error('请输入手机号');
+      }
+      console.log('获取验证码...');
     },
   },
 };
 </script>
-
-// <style lang="scss" scoped>
-// $bg:#2d3a4b;
-// $dark_gray:#889aa4;
-// $light_gray:#eee;
-
-// /* reset element-ui css */
-// .account-container {
-//   .el-input {
-//     display: inline-block;
-//     height: 47px;
-//     width: 85%;
-//     input {
-//       background: transparent;
-//       border: 0px;
-//       -webkit-appearance: none;
-//       border-radius: 0px;
-//       padding: 12px 5px 12px 15px;
-//       color: $light_gray;
-//       height: 47px;
-//       &:-webkit-autofill {
-//         -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
-//         -webkit-text-fill-color: #fff !important;
-//       }
-//     }
-//   }
-//   .el-form-item {
-//     border: 1px solid rgba(255, 255, 255, 0.1);
-//     background: rgba(0, 0, 0, 0.1);
-//     border-radius: 5px;
-//     color: #454545;
-//   }
-// }
-
-// .account-container {
-//   position: fixed;
-//   height: 100%;
-//   width: 100%;
-//   background-color: $bg;
-//   .account-form {
-//     position: absolute;
-//     left: 0;
-//     right: 0;
-//     width: 520px;
-//     padding: 35px 35px 15px 35px;
-//     margin: 120px auto;
-//   }
-//   .tips {
-//     font-size: 14px;
-//     color: #fff;
-//     margin-bottom: 10px;
-//     span {
-//       &:first-of-type {
-//         margin-right: 16px;
-//       }
-//     }
-//   }
-//   .svg-container {
-//     padding: 6px 5px 6px 15px;
-//     color: $dark_gray;
-//     vertical-align: middle;
-//     width: 30px;
-//     display: inline-block;
-//     &_login {
-//       font-size: 20px;
-//     }
-//   }
-//   .title-container {
-//     position: relative;
-//     .title {
-//       font-size: 26px;
-//       font-weight: 400;
-//       color: $light_gray;
-//       margin: 0px auto 40px auto;
-//       text-align: center;
-//       font-weight: bold;
-//     }
-//     .set-language {
-//       color: #fff;
-//       position: absolute;
-//       top: 5px;
-//       right: 0px;
-//     }
-//   }
-//   .show-pwd {
-//     position: absolute;
-//     right: 10px;
-//     top: 7px;
-//     font-size: 16px;
-//     color: $dark_gray;
-//     cursor: pointer;
-//     user-select: none;
-//   }
-//   .thirdparty-button {
-//     position: absolute;
-//     right: 35px;
-//     bottom: 28px;
-//   }
-// }
-// </style>
