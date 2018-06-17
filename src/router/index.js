@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Layout from '@/views/layout/';
-// import LoginPage from '@/views/login/';
 
 const importComp = require('./_import_comp');
 
@@ -112,29 +111,26 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     meta: {
-      roles: ['admin'],
-      title: 'form',
+      title: '表单页',
       icon: 'form',
     },
     children: [
       {
-        path: 'create-form',
-        component: importComp('form/create'),
-        name: 'createForm',
+        path: 'basic-form',
+        component: importComp('form/base'),
+        name: 'basicForm',
         meta: {
-          roles: ['admin'],
-          title: 'createForm',
-          icon: 'table',
+          title: '基础表单',
+          desc: '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
         },
       },
       {
-        path: 'edit-form',
-        component: importComp('form/edit'),
-        name: 'editForm',
+        path: 'step-form',
+        component: importComp('form/step'),
+        name: 'stepForm',
         meta: {
-          roles: ['admin'],
-          title: 'editForm',
-          icon: 'table',
+          title: '分步表单',
+          desc: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
         },
       },
     ],

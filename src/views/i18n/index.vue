@@ -1,6 +1,6 @@
 <template>
   <div class="app-internation">
-    <el-card class="box-card">
+    <el-card shadow="hover" class="box-card">
       <div slot="header" class="clearfix">
         <icon-svg name="international" />
         <span style='margin-left:10px;'>{{$t('i18nView.title')}}</span>
@@ -16,7 +16,7 @@
 
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.compTitle')}}</span>
           </div>
@@ -85,7 +85,7 @@
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.tableTitle')}}</span>
           </div>
@@ -115,7 +115,7 @@
 
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.htmlFormatTitle')}}</span>
           </div>
@@ -126,7 +126,7 @@
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.pluralizationTitle')}}</span>
           </div>
@@ -144,7 +144,7 @@
 
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.datetimeTitle')}}</span>
           </div>
@@ -155,7 +155,7 @@
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <el-card class="box-card">
+        <el-card shadow="hover" class="box-card">
           <div slot="header" class="clearfix">
             <span>{{$t('i18nView.numberTitle')}}</span>
           </div>

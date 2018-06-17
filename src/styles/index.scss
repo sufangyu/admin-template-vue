@@ -13,7 +13,7 @@ body {
 }
 
 label {
-  font-weight: 700;
+  font-weight: 400;
 }
 
 html {
@@ -74,4 +74,60 @@ code {
       color: rgb(32, 160, 255);
     }
   }
+}
+
+.result {
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 24px 0 8px;
+  text-align: center;
+
+  .title {
+    font-size: 24px;
+    color: rgba(0,0,0,.85);
+    font-weight: 500;
+    line-height: 32px;
+    margin-bottom: 16px;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 22px;
+    color: rgba(0,0,0,.45);
+    margin-bottom: 24px;
+  }
+
+  .actions {
+    margin-top: 24px;
+  }
+
+  .extra {
+    background: #fafafa;
+    padding: 24px 30px;
+    border-radius: 2px;
+    text-align: left;
+  }
+}
+
+
+/* reset element-ui */
+.el-card {
+  border: none;
+  border-radius: 2px;
+
+  &__body {
+    padding: 32px;
+  }
+}
+
+.el-step__head.is-process {
+  color: #808080;
+  border-color: #808080;
+}
+.el-step__title.is-process {
+  font-weight: 400;
+  color: #808080;
+}
+.el-step__description.is-process {
+  color: #808080;
 }
