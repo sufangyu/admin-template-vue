@@ -1,4 +1,5 @@
 import { asyncRouterMap, constantRouterMap } from '@/router';
+import formatRoles from '@/utils/formatRoles';
 
 /**
  * 通过 meta.roles 判断是否与当前用户权限匹配
@@ -44,7 +45,7 @@ const permission = {
     generateRoutes({ commit }, data) {
       return new Promise((resolve) => {
         const { roles } = data;
-        const accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
+        const accessedRouters = filterAsyncRouter(asyncRouterMap, formatRoles(roles));
         commit('SET_ROUTERS', accessedRouters);
         resolve();
       });

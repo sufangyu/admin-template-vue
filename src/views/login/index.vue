@@ -104,11 +104,14 @@ export default {
           try {
             const res = await this.$store.dispatch('loginByUsername', this.form);
             this.loading = false;
-            console.log('loginByUsername res', res);
-            const redirectUrl = this.$route.query.redirect ? decodeURIComponent(this.$route.query.redirect) : '/';
-            this.$router.replace({ path: redirectUrl });
-          } catch (err) {
-            console.error('handleLogin err =>>', err);
+            if (!res.success) {
+              this.$message.error(res.message || '登录失败，请重试');
+            } else {
+              const redirectUrl = this.$route.query.redirect ? decodeURIComponent(this.$route.query.redirect) : '/';
+              this.$router.replace({ path: redirectUrl });
+            }
+          } catch (error) {
+            console.error('handleLogin error=>>', error);
             this.loading = false;
           }
         }

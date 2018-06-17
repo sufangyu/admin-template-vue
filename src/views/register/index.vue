@@ -98,6 +98,8 @@
 <script>
 import CountDown from '@/components/CountDown';
 import { validateMin, validateMobile } from '@/utils/validateRules';
+import { getSMSCode } from '@/api/global';
+import { createAccount } from '@/api/account';
 
 export default {
   name: 'register',
@@ -156,22 +158,56 @@ export default {
   },
   methods: {
     handleRegister() {
-      this.$refs.form.validate((valid) => {
+      this.$refs.form.validate(async (valid) => {
         if (valid) {
           if (!this.form.agree) {
             this.$message.error('请勾选同意协议');
             return;
           }
 
-          console.log('提交...');
+          this.loading = true;
+          try {
+            const res = await createAccount(this.form);
+            this.loading = false;
+            if (!res.success) {
+              this.$message.error(res.message || '注册失败，请重试');
+            } else {
+              this.$message.success({
+                message: '注册成功，请登录',
+                onClose: () => {
+                  this.$router.replace({ path: '/login' });
+                },
+              });
+            }
+          } catch (error) {
+            console.log('handleRegister error', error);
+            this.$message.error('注册失败，请重试');
+            this.loading = false;
+          }
         }
       });
     },
-    getSMSCode() {
+    async getSMSCode() {
       if (this.form.mobile === '') {
         this.$message.error('请输入手机号');
       }
       console.log('获取验证码...');
+      try {
+        const data = {
+          mobile: this.form.mobile,
+        };
+        const res = await getSMSCode(data);
+        if (!res.success) {
+          this.$message.error(res.message || '获取失败，请重试');
+        } else {
+          this.$message.success('验证码已发送，请查收');
+          // 模拟验证码输入
+          this.form.code = res.data.code;
+        }
+      } catch (error) {
+        console.log('getSMSCode error', error);
+        this.$message.error('获取失败，请重试');
+      }
     },
   },
 };
