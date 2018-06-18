@@ -157,6 +157,64 @@ export const asyncRouterMap = [
     ],
   },
   {
+    path: '/excel',
+    name: 'excel',
+    component: Layout,
+    redirect: 'excel/export-excel',
+    alwaysShow: true,
+    meta: {
+      title: 'Excel',
+      icon: 'excel',
+    },
+    children: [
+      {
+        path: 'export-excel',
+        name: 'exportExcel',
+        component: importComp('excel/exportExcel'),
+        meta: {
+          title: '导出excel表',
+        },
+      },
+      {
+        path: 'select-excel',
+        name: 'selectExcel',
+        component: importComp('excel/selectExcel'),
+        meta: {
+          title: '导出指定数据',
+        },
+      },
+      {
+        path: 'upload-excel',
+        name: 'uploadExcel',
+        component: importComp('excel/uploadExcel'),
+        meta: {
+          title: '上传excel表',
+        },
+      },
+    ],
+  },
+  {
+    path: '/zip',
+    name: 'zip',
+    component: Layout,
+    redirect: 'zip/index',
+    alwaysShow: true,
+    meta: {
+      title: 'Zip',
+      icon: 'zip',
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'zipIndex',
+        component: importComp('zip/index'),
+        meta: {
+          title: '导出Zip',
+        },
+      },
+    ],
+  },
+  {
     path: '/auth',
     name: '权限控制',
     component: Layout,

@@ -1,6 +1,6 @@
 import formatRoles from '@/utils/formatRoles';
 import { getToken, setToken, removeToken } from '@/utils/auth';
-import { loginByUsername, getAccount } from '@/api/account';
+import { loginByUsername, getAccount } from '@/api/accounts';
 
 
 const user = {

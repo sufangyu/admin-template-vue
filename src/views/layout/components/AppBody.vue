@@ -50,12 +50,12 @@ export default {
   border-bottom: 1px solid #e8e8e8;
 }
 .page-content {
-  margin: 24px 24px 0;
+  margin: 24px;
 }
 
 @media screen and (max-width: 576px) {
   .page-content {
-    margin: 24px 0 0;
+    margin: 24px 0 24px;
   }
 }
 </style>

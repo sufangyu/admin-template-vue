@@ -99,7 +99,7 @@
 import CountDown from '@/components/CountDown';
 import { validateMin, validateMobile } from '@/utils/validateRules';
 import { getSMSCode } from '@/api/global';
-import { createAccount } from '@/api/account';
+import { createAccount } from '@/api/accounts';
 
 export default {
   name: 'register',

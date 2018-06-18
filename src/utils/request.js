@@ -141,22 +141,6 @@ const http = {
     }, options);
     return request(config);
   },
-  // post(url, data) {
-  //   return new Promise((resolve, reject) => {
-  //     axios({
-  //       method: 'POST',
-  //       url,
-  //       data,
-  //       cancelToken: new CancelToken((c) => {
-  //         cancel = c;
-  //       }),
-  //     }).then((res) => {
-  //       resolve(res);
-  //     }).catch((error) => {
-  //       reject(error);
-  //     });
-  //   });
-  // },
 };
 
 export default http;

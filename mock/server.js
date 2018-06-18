@@ -29,7 +29,7 @@ files.forEach((file) => {
 const router = jsonServer.router(base);
 
 // 用户信息
-server.get('/api/account', (req, res) => {
+server.get('/api/accounts', (req, res) => {
   const headers = req.headers;
   const accesstoken = headers['access-token'];
   if (!accesstoken) {
@@ -38,7 +38,7 @@ server.get('/api/account', (req, res) => {
       message: '会话失效，请重新登录',
     });
   } else {
-    const DB = low(new FileSync(path.resolve(mockDir, 'account.json')));
+    const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
     const account = DB.get('accounts')
       .find({ token: accesstoken })
       .value();
@@ -53,9 +53,9 @@ server.get('/api/account', (req, res) => {
 });
 
 // 登录
-server.post('/api/account/login', (req, res) => {
+server.post('/api/accounts/login', (req, res) => {
   const body = req.body;
-  const DB = low(new FileSync(path.resolve(mockDir, 'account.json')));
+  const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
   const account = DB.get('accounts')
     .find({ username: body.username, password: body.password })
     .value();
@@ -76,7 +76,7 @@ server.post('/api/account/login', (req, res) => {
 });
 
 // 注册
-server.post('/api/account/create', (req, res) => {
+server.post('/api/accounts/create', (req, res) => {
   const body = req.body;
   const db = router.db;
   const data = db.get('accounts').value();
@@ -99,7 +99,7 @@ server.post('/api/account/create', (req, res) => {
       created_at: new Date(),
       roles: [1],
     };
-    const DB = low(new FileSync(path.resolve(mockDir, 'account.json')));
+    const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
     DB.get('accounts')
       .push(newAccount)
       .write();
@@ -128,6 +128,18 @@ server.post('/api/global/sms', (req, res) => {
       },
     });
   }
+});
+
+// 文字
+server.get('/api/articles', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'articles.json')));
+  const articles = DB.get('articles').value();
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: articles,
+  });
 });
 
 server.use(router);

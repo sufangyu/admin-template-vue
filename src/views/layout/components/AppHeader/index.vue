@@ -39,10 +39,10 @@
             </div>
             <el-dropdown-menu slot="dropdown" placement="bottom-end">
               <el-dropdown-item>
-                <router-link to="/account/edit">{{'基本资料'}}</router-link>
+                <router-link to="/accounts/edit">{{'基本资料'}}</router-link>
               </el-dropdown-item>
               <el-dropdown-item>
-                <router-link to="/account/password">{{'修改密码'}}</router-link>
+                <router-link to="/accounts/password">{{'修改密码'}}</router-link>
               </el-dropdown-item>
               <el-dropdown-item disabled>
                 <router-link to="/">{{'账户设置'}}</router-link>
@@ -80,11 +80,10 @@ export default {
     toggleSidebar() {
       this.$store.dispatch('toggleSidebar');
     },
-    logout() {
-      this.$store.dispatch('logOut').then(() => {
-        // 退出后, 重新实例化 VUE 路由器对象以避免 bug
-        location.reload();
-      });
+    async logout() {
+      await this.$store.dispatch('logOut');
+      // 退出后, 重新实例化 VUE 路由器对象以避免 bug
+      location.reload();
     },
   },
 };
