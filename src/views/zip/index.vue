@@ -97,7 +97,7 @@ export default {
       const filterVal = ['id', 'title', 'author', 'pv', 'created_at'];
       const list = this.list;
       const data = this.formatJson(filterVal, list);
-      zip.export_txt_to_zip([], data, this.filename, this.filename);
+      zip.export_txt_to_zip(tHeader, data, this.filename, this.filename);
       this.downloadLoading = false;
     },
     formatJson(filterVal, jsonData) {

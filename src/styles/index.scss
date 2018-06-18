@@ -1,29 +1,7 @@
 @import './mixin.scss';
+@import './normalize.scss';
 @import './flex.scss';
 @import './account.scss';
-
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
-  font-size: 14px;
-  color: rgba($color: #000000, $alpha: 0.8);
-  height: 100%;
-}
-
-label {
-  font-weight: 400;
-}
-
-html {
-  height: 100%;
-  box-sizing: border-box;
-}
-
-#app {
-  height: 100%;
-}
 
 *,
 *:before,
@@ -44,8 +22,46 @@ a:hover {
   text-decoration: none;
 }
 
+a {
+  color: #409EFF;
+  transition: opacity 0.25s;
+
+  &:hover {
+    color: #409EFF;
+    opacity: 0.8;
+  }
+}
+
+
 div:focus{
   outline: none;
+}
+
+label {
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+  font-size: 14px;
+  color: rgba($color: #000000, $alpha: 0.8);
+  height: 100%;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
 }
 
 .clearfix {
@@ -73,39 +89,6 @@ code {
     &:hover {
       color: rgb(32, 160, 255);
     }
-  }
-}
-
-.result {
-  margin: 0 auto;
-  max-width: 560px;
-  padding: 24px 0 8px;
-  text-align: center;
-
-  .title {
-    font-size: 24px;
-    color: rgba(0,0,0,.85);
-    font-weight: 500;
-    line-height: 32px;
-    margin-bottom: 16px;
-  }
-
-  .description {
-    font-size: 14px;
-    line-height: 22px;
-    color: rgba(0,0,0,.45);
-    margin-bottom: 24px;
-  }
-
-  .actions {
-    margin-top: 24px;
-  }
-
-  .extra {
-    background: #fafafa;
-    padding: 24px 30px;
-    border-radius: 2px;
-    text-align: left;
   }
 }
 

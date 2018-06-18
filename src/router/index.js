@@ -136,6 +136,51 @@ export const asyncRouterMap = [
     ],
   },
   {
+    path: '/result',
+    name: 'result',
+    component: Layout,
+    redirect: 'result/success',
+    alwaysShow: true,
+    meta: {
+      title: '结果页',
+      icon: 'result',
+    },
+    children: [
+      {
+        path: 'success',
+        name: 'resultSuccess',
+        component: importComp('result/success'),
+        meta: {
+          title: '成功',
+        },
+      },
+      {
+        path: 'fail',
+        name: 'resultFail',
+        component: importComp('result/fail'),
+        meta: {
+          title: '失败',
+        },
+      },
+      {
+        path: 'dealing',
+        name: 'resultDealing',
+        component: importComp('result/dealing'),
+        meta: {
+          title: '处理中',
+        },
+      },
+      {
+        path: 'waring',
+        name: 'resultWaring',
+        component: importComp('result/waring'),
+        meta: {
+          title: '警告',
+        },
+      },
+    ],
+  },
+  {
     path: '/clipboard',
     name: 'clipboard',
     component: Layout,
