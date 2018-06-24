@@ -1,6 +1,6 @@
 <template>
   <div class="excel-export">
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <el-form ref="form" label-position="right" label-width="60px">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
@@ -139,9 +139,6 @@ export default {
 
 <style lang="scss">
 .excel-export {
-  .el-card {
-    margin-bottom: 15px;
-  }
   .el-form-item {
     margin-bottom: 0;
   }

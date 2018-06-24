@@ -1,6 +1,6 @@
 <template>
   <div class="result-demo">
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <result
         type="success"
         title="提交成功"
@@ -20,7 +20,7 @@
       </result>
     </el-card>
 
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <result
         :image="image"
         title="支付成功"
@@ -30,7 +30,7 @@
       </result>
     </el-card>
 
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <result
         type="success"
         title="验证成功"
@@ -55,11 +55,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.result-demo {
-  .el-card {
-    margin-bottom: 25px;
-  }
-}
-</style>

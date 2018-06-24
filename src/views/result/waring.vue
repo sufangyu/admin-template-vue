@@ -1,6 +1,6 @@
 <template>
   <div class="result-demo">
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <result
         type="waring"
         title="无法完成操作"
@@ -19,11 +19,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.result-demo {
-  .el-card {
-    margin-bottom: 25px;
-  }
-}
-</style>

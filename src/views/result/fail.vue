@@ -1,6 +1,6 @@
 <template>
   <div class="result-demo">
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <result
         type="fail"
         title="支付失败"
@@ -35,11 +35,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.result-demo {
-  .el-card {
-    margin-bottom: 25px;
-  }
-}
-</style>

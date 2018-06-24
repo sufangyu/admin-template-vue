@@ -22,17 +22,6 @@ a:hover {
   text-decoration: none;
 }
 
-a {
-  color: #409EFF;
-  transition: opacity 0.25s;
-
-  &:hover {
-    color: #409EFF;
-    opacity: 0.8;
-  }
-}
-
-
 div:focus{
   outline: none;
 }
@@ -43,25 +32,6 @@ label {
 
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
-}
-
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
-  font-size: 14px;
-  color: rgba($color: #000000, $alpha: 0.8);
-  height: 100%;
-}
-
-html {
-  height: 100%;
-  box-sizing: border-box;
-}
-
-#app {
-  height: 100%;
 }
 
 .clearfix {
@@ -92,17 +62,80 @@ code {
   }
 }
 
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+  font-size: 14px;
+  color: rgba($color: #000000, $alpha: 0.8);
+  height: 100%;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+.app-layout-body {
+  a {
+    color: #409EFF;
+    transition: opacity 0.25s;
+  
+    &:hover {
+      color: #409EFF;
+      opacity: 0.8;
+    }
+  }
+}
+
 
 /* reset element-ui */
 .el-card {
   border: none;
   border-radius: 2px;
 
+  &.card-bottom {
+    margin-bottom: 20px;
+  }
+
+  &.card-header-border-none {
+    .el-card__header {
+      border: none;
+    }
+  }
+
+  &__header {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
   &__body {
-    padding: 32px;
+    padding: 25px 32px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: center;
+
+    &-title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 400;
+    }
   }
 }
 
+.el-pagination {
+  font-weight: 400;
+}
+
+
+/* 步骤 */
 .el-step__head.is-process {
   color: #808080;
   border-color: #808080;
@@ -113,4 +146,175 @@ code {
 }
 .el-step__description.is-process {
   color: #808080;
+}
+
+
+/* 列表 筛选查询表单 */
+.list-query {
+
+  &-form {
+    display: grid;
+    margin: -10px;
+    grid-template-columns: 1fr 1fr 1fr;
+  
+    .el-form-item {
+      display: flex;
+      margin: 10px;
+  
+      &__content {
+        flex: 1;      
+      }
+    }
+
+    .input-with-select {
+      .el-select .el-input {
+        width: 90px;
+      }
+      .el-input-group__prepend {
+        background-color: #fff;
+      }
+    }
+  
+    .el-input,
+      .el-select,
+      .el-date-editor {
+        width: 100%;
+      }
+  
+    .form-buttons {
+      min-width: 160px;
+    }
+    .el-date-editor--daterange.el-input,
+    .el-date-editor--daterange.el-input__inner,
+    .el-date-editor--timerange.el-input,
+    .el-date-editor--timerange.el-input__inner {
+      width: auto;
+    }
+  
+    .el-date-editor .el-range-separator {
+      width: 25px;
+    }
+  }
+}
+@media screen and (max-width: 769px) {
+  .list-query-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (max-width: 640px) {
+  .list-query-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 列表底部区域 */
+.list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+
+  &-left,
+  &-right {
+    padding: 10px 0;
+  }
+}
+@media screen and (max-width: 1120px) {
+  .list-footer {
+    .el-pagination {
+      .el-pagination__sizes {
+        display: none;
+      }
+    }
+  }
+}
+@media screen and (max-width: 769px) {
+  .list-footer {
+    .el-pagination {
+      .el-pagination__jump {
+        display: none;
+      }
+      .el-pagination__total {
+        display: none;
+      }
+    }
+  }
+}
+@media screen and (max-width: 542px) {
+  .list-footer {
+    .el-pagination {
+      padding: 0;
+
+      .btn-prev,
+      .btn-next {
+        margin: 0;
+      }
+      .el-pager {
+        .number:not(:last-child) {
+          display: none;
+
+          &.active {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 360px) {
+  .list-footer {
+    .btn-quickprev,
+    .btn-quicknext {
+      display: none;
+    }
+  }
+}
+
+
+/* 列表 操作 */
+.list-operator {
+  margin-bottom: 16px;
+
+  .el-button + .el-dropdown {
+    margin-left: 10px;
+  }
+}
+
+/* 表格列表提示信息 */
+.table-list-alert {
+  margin-bottom: 16px;
+
+  .alert-content {
+    font-size: 13px;
+    line-height: 1.1;
+  }
+
+  .action-line {
+    color: #409EFF;
+    cursor: pointer;
+    margin-left: 15px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  strong {
+    padding: 0 3px;
+  }
+
+  .el-alert__icon {
+    font-size: 16px;
+    width: 16px;
+  }
+}
+
+.table-list,
+.bast-list {
+  .el-button {
+    + .el-button,
+    + .el-dropdown {
+      margin-left: 10px;
+    }
+  }
 }

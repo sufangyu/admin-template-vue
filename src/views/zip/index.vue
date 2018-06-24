@@ -1,6 +1,6 @@
 <template>
   <div class="zip-export">
-    <el-card shadow="hover">
+    <el-card shadow="hover" class="card-bottom">
       <el-form ref="form" label-position="right" label-width="50px">
         <el-row :gutter="10">
           <el-col :xs="16" :sm="16" :md="12" :lg="12" :xl="12">
@@ -114,9 +114,6 @@ export default {
 
 <style lang="scss">
 .zip-export {
-  .el-card {
-    margin-bottom: 15px;
-  }
   .el-form-item {
     margin-bottom: 0;
   }

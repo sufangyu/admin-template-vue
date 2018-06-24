@@ -105,6 +105,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // 表单页
   {
     path: '/form',
     name: 'form',
@@ -135,6 +137,82 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // 列表页
+  {
+    path: '/list',
+    name: 'list',
+    component: Layout,
+    redirect: 'list/table-list',
+    alwaysShow: true,
+    meta: {
+      title: '列表页',
+      icon: 'list',
+    },
+    children: [
+      {
+        path: 'table-list',
+        name: 'tableList',
+        component: importComp('list/tableList'),
+        meta: {
+          title: '查询表格',
+        },
+      },
+      {
+        path: 'basic-list',
+        name: 'basicList',
+        component: importComp('list/basicList'),
+        meta: {
+          title: '标准列表',
+        },
+      },
+      {
+        path: 'card-list',
+        name: 'cardList',
+        component: importComp('list/cardList'),
+        meta: {
+          title: '卡片列表',
+        },
+      },
+      {
+        path: '/list/search',
+        name: 'searchList',
+        redirect: 'list/search/articles',
+        // component: importComp('result/waring'),
+        meta: {
+          title: '搜索列表',
+        },
+        children: [
+          {
+            path: 'articles',
+            name: 'searchListArticles',
+            component: importComp('list/search/articles'),
+            meta: {
+              title: '搜索列表（文章）',
+            },
+          },
+          {
+            path: 'projects',
+            name: 'searchListProjects',
+            component: importComp('list/search/projects'),
+            meta: {
+              title: '搜索列表（项目）',
+            },
+          },
+          {
+            path: 'applications',
+            name: 'searchListApplications',
+            component: importComp('list/search/applications'),
+            meta: {
+              title: '搜索列表（应用）',
+            },
+          },
+        ],
+      },
+    ],
+  },
+
+  // 结果页
   {
     path: '/result',
     name: 'result',
@@ -180,6 +258,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // 复制剪贴板
   {
     path: '/clipboard',
     name: 'clipboard',
@@ -187,7 +267,7 @@ export const asyncRouterMap = [
     redirect: 'clipboard/index',
     alwaysShow: true,
     meta: {
-      title: '剪贴板',
+      title: '复制剪贴板',
       icon: 'clipboard',
     },
     children: [
@@ -201,6 +281,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // excel 导出导入
   {
     path: '/excel',
     name: 'excel',
@@ -238,6 +320,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // zip 导出导入
   {
     path: '/zip',
     name: 'zip',
@@ -259,6 +343,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // 权限控制
   {
     path: '/auth',
     name: '权限控制',
@@ -307,6 +393,8 @@ export const asyncRouterMap = [
       },
     ],
   },
+
+  // 国际化多语言
   {
     path: '/i18n',
     component: Layout,

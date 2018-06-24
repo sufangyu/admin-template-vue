@@ -122,9 +122,16 @@ export default {
     padding-bottom: 5px;
   }
 
-  .el-submenu.is-active .el-submenu__title {
+  .el-submenu.is-active > .el-submenu__title {
     border-bottom: none;
     color: #fff !important;
+  }
+
+  // 嵌套菜单
+  .nest-menu {
+    .el-submenu__title {
+      background-color: transparent !important;
+    }
   }
 }
 
@@ -142,7 +149,6 @@ export default {
     position: relative;
 
     .el-tooltip {
-      // padding: 0 10px !important;
 
       .icon-svg {
         margin-left: 11px;
