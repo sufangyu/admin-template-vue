@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Layout from '@/views/layout/';
+import LayoutEmpty from '@/views/layoutEmpty/';
 
-const importComp = require('./_import_comp');
 
 Vue.use(Router);
 
@@ -29,7 +29,7 @@ export const constantRouterMap = [
     children: [{
       path: 'dashboard',
       name: 'dashboard',
-      component: importComp('dashboard/index'),
+      component: () => import('@/views/dashboard/index'),
       meta: {
         icon: 'home',
         title: '控制台',
@@ -41,70 +41,71 @@ export const constantRouterMap = [
   {
     path: '/login',
     name: 'Login',
-    component: importComp('login/index'),
+    component: () => import('@/views/login/index'),
     hidden: true,
   },
   {
     path: '/register',
     name: 'Register',
-    component: importComp('register/index'),
+    component: () => import('@/views/register/index'),
     hidden: true,
   },
   {
     path: '/404',
     name: 'NotFound',
-    component: importComp('errorPage/404'),
+    component: () => import('@/views/errorPage/404'),
     hidden: true,
   },
   {
     path: '/401',
     name: 'NoAuthority',
-    component: importComp('errorPage/401'),
+    component: () => import('@/views/errorPage/401'),
     hidden: true,
   },
 ];
 
 // 异步动态路由
 export const asyncRouterMap = [
-  {
-    path: '/charts',
-    component: Layout,
-    redirect: 'noredirect',
-    name: 'charts',
-    meta: {
-      title: 'charts',
-      icon: 'chart',
-    },
-    children: [
-      {
-        path: 'keyboard',
-        component: importComp('charts/keyboard'),
-        name: 'keyboardChart',
-        meta: {
-          title: 'keyboardChart',
-          noCache: true,
-        },
-      },
-      {
-        path: 'line',
-        component: importComp('charts/line'),
-        name: 'lineChart',
-        meta: {
-          title: 'lineChart',
-          noCache: true,
-        },
-      },
-      {
-        path: 'mixchart',
-        component: importComp('charts/mixChart'),
-        name: 'mixChart',
-        meta: {
-          title: 'mixChart',
-          noCache: true,
-        },
-      },
-    ],
-  },
+  // 图表
+  // {
+  //   path: '/charts',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   name: 'charts',
+  //   meta: {
+  //     title: 'charts',
+  //     icon: 'chart',
+  //   },
+  //   children: [
+  //     {
+  //       path: 'keyboard',
+  //       component: () => import('@/views/charts/keyboard'),
+  //       name: 'keyboardChart',
+  //       meta: {
+  //         title: 'keyboardChart',
+  //         noCache: true,
+  //       },
+  //     },
+  //     {
+  //       path: 'line',
+  //       component: () => import('@/views/charts/line'),
+  //       name: 'lineChart',
+  //       meta: {
+  //         title: 'lineChart',
+  //         noCache: true,
+  //       },
+  //     },
+  //     {
+  //       path: 'mixchart',
+  //       component: () => import('@/views/charts/mixChart'),
+  //       name: 'mixChart',
+  //       meta: {
+  //         title: 'mixChart',
+  //         noCache: true,
+  //       },
+  //     },
+  //   ],
+  // },
 
   // 表单页
   {
@@ -119,8 +120,8 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'basic-form',
-        component: importComp('form/base'),
         name: 'basicForm',
+        component: () => import('@/views/form/base'),
         meta: {
           title: '基础表单',
           desc: '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
@@ -128,8 +129,8 @@ export const asyncRouterMap = [
       },
       {
         path: 'step-form',
-        component: importComp('form/step'),
         name: 'stepForm',
+        component: () => import('@/views/form/step'),
         meta: {
           title: '分步表单',
           desc: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
@@ -153,7 +154,7 @@ export const asyncRouterMap = [
       {
         path: 'table-list',
         name: 'tableList',
-        component: importComp('list/tableList'),
+        component: () => import('@/views/list/tableList'),
         meta: {
           title: '查询表格',
         },
@@ -161,7 +162,7 @@ export const asyncRouterMap = [
       {
         path: 'basic-list',
         name: 'basicList',
-        component: importComp('list/basicList'),
+        component: () => import('@/views/list/basicList'),
         meta: {
           title: '标准列表',
         },
@@ -169,42 +170,50 @@ export const asyncRouterMap = [
       {
         path: 'card-list',
         name: 'cardList',
-        component: importComp('list/cardList'),
+        component: () => import('@/views/list/cardList'),
         meta: {
           title: '卡片列表',
+        },
+      },
+      {
+        path: 'thumbs-list',
+        name: 'thumbsList',
+        component: () => import('@/views/list/thumbsList'),
+        meta: {
+          title: '缩略图列表',
         },
       },
       {
         path: '/list/search',
         name: 'searchList',
         redirect: 'list/search/articles',
-        // component: importComp('result/waring'),
+        component: LayoutEmpty,
         meta: {
-          title: '搜索列表',
+          title: '三级菜单',
         },
         children: [
           {
             path: 'articles',
             name: 'searchListArticles',
-            component: importComp('list/search/articles'),
+            component: () => import('@/views/list/tableList'),
             meta: {
-              title: '搜索列表（文章）',
+              title: '三级页面',
             },
           },
           {
             path: 'projects',
             name: 'searchListProjects',
-            component: importComp('list/search/projects'),
+            component: () => import('@/views/list/basicList'),
             meta: {
-              title: '搜索列表（项目）',
+              title: '三级页面',
             },
           },
           {
             path: 'applications',
             name: 'searchListApplications',
-            component: importComp('list/search/applications'),
+            component: () => import('@/views/list/cardList'),
             meta: {
-              title: '搜索列表（应用）',
+              title: '三级页面',
             },
           },
         ],
@@ -227,7 +236,7 @@ export const asyncRouterMap = [
       {
         path: 'success',
         name: 'resultSuccess',
-        component: importComp('result/success'),
+        component: () => import('@/views/result/success'),
         meta: {
           title: '成功',
         },
@@ -235,7 +244,7 @@ export const asyncRouterMap = [
       {
         path: 'fail',
         name: 'resultFail',
-        component: importComp('result/fail'),
+        component: () => import('@/views/result/fail'),
         meta: {
           title: '失败',
         },
@@ -243,7 +252,7 @@ export const asyncRouterMap = [
       {
         path: 'dealing',
         name: 'resultDealing',
-        component: importComp('result/dealing'),
+        component: () => import('@/views/result/dealing'),
         meta: {
           title: '处理中',
         },
@@ -251,7 +260,7 @@ export const asyncRouterMap = [
       {
         path: 'waring',
         name: 'resultWaring',
-        component: importComp('result/waring'),
+        component: () => import('@/views/result/waring'),
         meta: {
           title: '警告',
         },
@@ -274,7 +283,7 @@ export const asyncRouterMap = [
       {
         path: 'index',
         name: 'clipboardDemo',
-        component: importComp('clipboard/index'),
+        component: () => import('@/views/clipboard/index'),
         meta: {
           title: '剪贴板示例',
         },
@@ -297,7 +306,7 @@ export const asyncRouterMap = [
       {
         path: 'export-excel',
         name: 'exportExcel',
-        component: importComp('excel/exportExcel'),
+        component: () => import('@/views/excel/exportExcel'),
         meta: {
           title: '导出excel表',
         },
@@ -305,7 +314,7 @@ export const asyncRouterMap = [
       {
         path: 'select-excel',
         name: 'selectExcel',
-        component: importComp('excel/selectExcel'),
+        component: () => import('@/views/excel/selectExcel'),
         meta: {
           title: '导出指定数据',
         },
@@ -313,7 +322,7 @@ export const asyncRouterMap = [
       {
         path: 'upload-excel',
         name: 'uploadExcel',
-        component: importComp('excel/uploadExcel'),
+        component: () => import('@/views/excel/uploadExcel'),
         meta: {
           title: '上传excel表',
         },
@@ -336,7 +345,7 @@ export const asyncRouterMap = [
       {
         path: 'index',
         name: 'zipIndex',
-        component: importComp('zip/index'),
+        component: () => import('@/views/zip/index'),
         meta: {
           title: '导出Zip',
         },
@@ -358,7 +367,7 @@ export const asyncRouterMap = [
       {
         path: 'index',
         name: 'authDemo',
-        component: importComp('auth/index'),
+        component: () => import('@/views/auth/index'),
         meta: {
           title: '所有用户可见',
           desc: '不同权限的用户, 显示不同的菜单入口',
@@ -367,7 +376,7 @@ export const asyncRouterMap = [
       {
         path: 'admin',
         name: 'authAdmin',
-        component: importComp('auth/admin'),
+        component: () => import('@/views/auth/admin'),
         meta: {
           title: '管理员可见',
           roles: ['admin'],
@@ -376,7 +385,7 @@ export const asyncRouterMap = [
       {
         path: 'editor',
         name: 'authEditor',
-        component: importComp('auth/editor'),
+        component: () => import('@/views/auth/editor'),
         meta: {
           title: '运营编辑',
           roles: ['editor'],
@@ -385,7 +394,7 @@ export const asyncRouterMap = [
       {
         path: 'dev',
         name: 'authDev',
-        component: importComp('auth/dev'),
+        component: () => import('@/views/auth/dev'),
         meta: {
           title: '开发者',
           roles: ['dev'],
@@ -401,7 +410,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'index',
-        component: importComp('i18n/index'),
+        component: () => import('@/views/i18n/index'),
         name: 'i18n',
         meta: {
           title: 'i18n',

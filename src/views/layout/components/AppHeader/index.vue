@@ -22,10 +22,8 @@
             width="320"
             trigger="click"
           >
-            <div class="">
-              <h3>我是标题</h3>
-              <p>这是一段内容,这是一段内容,这是一段内容,这是一段内容。</p>
-            </div>
+            <!-- message tabs -->
+            <messages />
             <el-badge slot="reference" :value="15" :max="99">
               <icon-svg name="bell" />
             </el-badge>
@@ -62,12 +60,14 @@
 import { mapGetters } from 'vuex';
 import IconSvg from '@/components/IconSvg';
 import Hamburger from './Hamburger';
+import Messages from './Messages';
 
 export default {
   name: 'appHeader',
   components: {
     IconSvg,
     Hamburger,
+    Messages,
   },
   computed: {
     ...mapGetters([

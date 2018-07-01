@@ -29,7 +29,21 @@
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">标准列表</h3>
         <div class="card-header-right">
-          <el-button style="padding: 3px;" type="text">操作按钮</el-button>
+          <el-radio-group v-model="query.status" size="small">
+            <el-radio-button
+              class="query-filter"
+              v-for="item in queryOptions.status"
+              :key="item.label"
+              :label="item.label"
+            >{{item.name}}</el-radio-button>
+          </el-radio-group>
+          <el-input
+            class="query-search"
+            size="small"
+            placeholder="请输入"
+            suffix-icon="el-icon-search"
+            v-model="query.search"
+          ></el-input>
         </div>
       </div>
 
@@ -42,11 +56,14 @@
           <el-table
             style="width: 100%"
             :show-header="false"
-            ref="listTable"
+            ref="listBasic"
             :data="list"
             v-loading="loading"
           >
-            <el-table-column label="信息">
+            <el-table-column
+              label="信息"
+              min-width="450"
+            >
               <template slot-scope="scope">
                 <div class="list-item-meta">
                   <div class="list-item-meta-image">
@@ -197,7 +214,7 @@ const getList = (query = {}) => {
       detail: '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
     },
     {
-      id: '1007',
+      id: '1008',
       image: 'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png',
       owner: '付小小',
       startDate: '2018-06-24 20:35',
@@ -221,29 +238,27 @@ const getList = (query = {}) => {
   });
 };
 
+// 查询数据的默认值
+const defaults = {
+  status: '1',
+  page: 1,
+};
+
 export default {
   data() {
     return {
       query: {
-        type: '1',
-        value: '',
-        status: '',
-        date: '',
-        approver: '',
+        status: defaults.status,
+        search: '',
       },
       queryOptions: {
-        type: [
-          { label: 'ID', value: '1' },
-          { label: '用户名', value: '2' },
-          { label: '邮箱', value: '3' },
-          { label: '地址', value: '4' },
-        ],
         status: [
-          { label: '无效', value: '1' },
-          { label: '有效', value: '2' },
+          { name: '全部', label: '1' },
+          { name: '进行中', label: '2' },
+          { name: '等待中', label: '3' },
         ],
       },
-      page: 1,
+      page: defaults.page,
       size: 10,
       total: 0,
       pagination: {
@@ -251,7 +266,6 @@ export default {
         layout: 'total, sizes, prev, pager, next, jumper',
       },
       list: [],
-      multipleSelection: [],
       loading: false,
     };
   },
@@ -403,6 +417,27 @@ export default {
     margin-top: 4px;
     margin-bottom: 0;
     line-height: 22px;
+  }
+}
+
+.query-filter,
+.query-search {
+  display: inline-block;
+}
+.query-search {
+  width: 240px;
+}
+
+
+@media screen and (max-width: 769px) {
+  .query-search {
+    display: block;
+    margin-top: 8px;
+  }
+}
+@media screen and (max-width: 361px) {
+  .query-search {
+    width: 190px;
   }
 }
 </style>

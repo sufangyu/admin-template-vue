@@ -50,7 +50,7 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 101;
+  z-index: 1001;
   overflow: hidden;
   transition: width 0.28s;
   box-shadow: 2px 0 6px rgba(0,21,41,.35);

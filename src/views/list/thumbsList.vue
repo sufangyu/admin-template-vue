@@ -1,46 +1,55 @@
 <template>
   <div
-    class="card-list"
+    class="thumbs-list"
     v-loading="loading"
   >
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+      <!-- <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
         <div class="card-item card-item-create">
           <div class="button-create">
             <i class="el-icon-plus"></i>
             <span>新增产品</span>
           </div>
         </div>
-      </el-col>
+      </el-col> -->
       <el-col
         :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
         v-for="item in list"
         :key="item.id"
       >
-        <div class="card-item">
-          <div class="card-item-body">
-            <div class="card-item-meta">
-              <div class="card-item-meta-img"><img :src="item.image" alt=""></div>
-              <div class="card-item-meta-detail">
-                <div class="card-item-meta-title">{{item.title}}</div>
-                <div class="card-item-meta-description">{{item.detail}}</div>
-              </div>
+        <el-card
+          class="card-bottom post-item"
+          :body-style="{ padding: '0px' }"
+          shadow="hover"
+        >
+          <div class="post-item-img">
+            <img :src="item.image" class="image">
+          </div>
+          <div class="post-item-detail">
+            <h3 class="post-item-title">{{item.title}}</h3>
+            <div class="post-item-description">{{item.detail}}</div>
+            <div class="post-item-actions">
+              <time class="time">{{item.startDate}}</time>
+              <el-button type="text" class="button">操作按钮</el-button>
             </div>
           </div>
-          <div class="card-item-action">
-            <el-tooltip class="item" effect="dark" content="下载" placement="top">
-              <div><i class="el-icon-download"></i></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-              <div><i class="el-icon-edit"></i></div>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="分享" placement="top">
-              <div><i class="el-icon-share"></i></div>
-            </el-tooltip>
-          </div>
-        </div>
+        </el-card>
       </el-col>
     </el-row>
+
+    <div class="list-footer list-footer-center">
+      <el-pagination
+        background
+        :total="total"
+        :current-page="page"
+        :page-size="size"
+        :layout="pagination.layout"
+        :page-sizes="pagination.pageSizes"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -50,7 +59,7 @@ const getList = (query = {}) => {
   const data = [
     {
       id: '1001',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
       owner: '张三疯',
       startDate: '2018-06-24 20:35',
       title: 'Alipay',
@@ -58,7 +67,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1002',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
       owner: '周星星',
       startDate: '2018-06-24 20:35',
       title: 'Angular',
@@ -66,7 +75,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1003',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
       owner: '林东东',
       startDate: '2018-06-24 20:35',
       title: 'Ant Design',
@@ -74,7 +83,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1004',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
       owner: '付小小',
       startDate: '2018-06-24 20:35',
       title: 'Ant Design Pro',
@@ -82,7 +91,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1005',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
       owner: '张雪松',
       startDate: '2018-06-24 20:35',
       title: 'Bootstrap',
@@ -90,7 +99,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1006',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
       owner: '王少',
       startDate: '2018-06-24 20:35',
       title: 'Angular',
@@ -98,7 +107,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1007',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
       owner: '卿文卡',
       startDate: '2018-06-24 20:35',
       title: 'Vue',
@@ -106,7 +115,7 @@ const getList = (query = {}) => {
     },
     {
       id: '1008',
-      image: 'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png',
+      image: 'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
       owner: '付小小',
       startDate: '2018-06-24 20:35',
       title: 'Webpack',
@@ -138,17 +147,6 @@ const defaults = {
 export default {
   data() {
     return {
-      query: {
-        status: defaults.status,
-        search: '',
-      },
-      queryOptions: {
-        status: [
-          { name: '全部', label: '1' },
-          { name: '进行中', label: '2' },
-          { name: '等待中', label: '3' },
-        ],
-      },
       page: defaults.page,
       size: 10,
       total: 0,

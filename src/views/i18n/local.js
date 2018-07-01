@@ -38,7 +38,7 @@ export default {
 
       compTitle: 'Component',
       datePlaceholder: 'Pick a day',
-      default: 'default:',
+      default: 'default',
       primary: 'primary',
       success: 'success',
       info: 'info',
