@@ -58,7 +58,7 @@ const request = (defaults = {}) => {
             error.message = '拒绝访问';
             break;
           case 404:
-            error.message = '请求错误,未找到该资源';
+            error.message = '请求错误，未找到该资源';
             break;
           case 405:
             error.message = '请求方法未允许';
