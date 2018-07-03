@@ -15,4 +15,15 @@ export function getSMSCode(data) {
   return http.post(url, data);
 }
 
-export function temp() {}
+
+/**
+ * 获取未读信息
+ *
+ * @export
+ * @returns
+ */
+export function getUnreadMesages() {
+  const url = `${BASE_API}/messages/unread`;
+
+  return http.get(url);
+}

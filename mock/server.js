@@ -130,7 +130,7 @@ server.post('/api/global/sms', (req, res) => {
   }
 });
 
-// 文字
+// 文章
 server.get('/api/articles', (req, res) => {
   const DB = low(new FileSync(path.resolve(mockDir, 'articles.json')));
   const articles = DB.get('articles').value();
@@ -141,6 +141,19 @@ server.get('/api/articles', (req, res) => {
     data: articles,
   });
 });
+
+// 未读信息
+server.get('/api/messages/unread', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'messages.json')));
+  const unreadMessages = DB.get('unread').value();
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: unreadMessages || [],
+  });
+});
+
 
 server.use(router);
 

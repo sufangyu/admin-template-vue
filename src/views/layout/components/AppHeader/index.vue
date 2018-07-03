@@ -21,10 +21,11 @@
             placement="bottom"
             width="320"
             trigger="click"
+            @show="handleMessagePopoverShow"
           >
             <!-- message tabs -->
-            <messages />
-            <el-badge slot="reference" :value="15" :max="99">
+            <messages ref="messages" />
+            <el-badge slot="reference" :value="unreadCount" :max="99">
               <icon-svg name="bell" />
             </el-badge>
           </el-popover>
@@ -69,6 +70,11 @@ export default {
     Hamburger,
     Messages,
   },
+  data() {
+    return {
+      unreadCount: 10,
+    };
+  },
   computed: {
     ...mapGetters([
       'device',
@@ -84,6 +90,13 @@ export default {
       await this.$store.dispatch('logOut');
       // 退出后, 重新实例化 VUE 路由器对象以避免 bug
       location.reload();
+    },
+    /**
+     * 信息弹出框 显示
+     */
+    handleMessagePopoverShow() {
+      // 加载数据
+      this.$refs.messages.getMessages();
     },
   },
 };

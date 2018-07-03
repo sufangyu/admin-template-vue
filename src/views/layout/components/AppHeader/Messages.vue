@@ -1,6 +1,6 @@
 <template>
-  <div class="tabs-message">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+  <div class="tabs-message" v-loading="loading">
+    <el-tabs :stretch="true" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane :label="`通知${notices.count !== 0 ? `(${notices.count})` : ''}`" name="notices">
         <div class="tabs-message-list">
           <div class="tabs-message-list-container" v-if="notices.count !== 0">
@@ -64,13 +64,13 @@
             <icon-svg name="bell"></icon-svg>
             <div>你已查看所有通知</div>
           </div>
-          <div class="tabs-message-list-clear">清空通知</div>
+          <div class="tabs-message-list-clear" @click="clear('notices')">清空通知</div>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="`消息${infos.count !== 0 ? `(${infos.count})` : ''}`" name="infos">
         <div class="tabs-message-list">
           <div class="tabs-message-list-container" v-if="infos.count !== 0">
-            <div class="item">
+            <div class="item" v-for="item in infos" :key="item.id">
               <div class="item-img"><img src="https://avatars1.githubusercontent.com/u/1852629?s=460&v=4" alt=""></div>
               <div class="item-content">
                 <div class="item-title">
@@ -81,34 +81,12 @@
                 <div class="item-datetime">1 年前</div>
               </div>
             </div>
-            <div class="item">
-              <div class="item-img"><img src="https://avatars1.githubusercontent.com/u/1852629?s=460&v=4" alt=""></div>
-              <div class="item-content">
-                <div class="item-title">
-                  <h4>朱偏右 回复了你</h4>
-                  <div class="extra"></div>
-                </div>
-                <div class="item-description">这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像</div>
-                <div class="item-datetime">1 年前</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="item-img"><img src="https://avatars1.githubusercontent.com/u/1852629?s=460&v=4" alt=""></div>
-              <div class="item-content">
-                <div class="item-title">
-                  <h4>信息标题</h4>
-                  <div class="extra"></div>
-                </div>
-                <div class="item-description">这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像</div>
-                <div class="item-datetime">1 年前</div>
-              </div>
-            </div>
           </div>
           <div class="tabs-message-list-empty" v-else>
             <icon-svg name="info"></icon-svg>
-            <div>你已查看所有通知</div>
+            <div>你已查看所有信息</div>
           </div>
-          <div class="tabs-message-list-clear">清空消息</div>
+          <div class="tabs-message-list-clear" @click="clear('infos')">清空消息</div>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="`待办${todos.count !== 0 ? `(${todos.count})` : ''}`" name="todos">
@@ -153,9 +131,9 @@
           </div>
           <div class="tabs-message-list-empty" v-else>
             <icon-svg name="todo"></icon-svg>
-            <div>你已查看所有通知</div>
+            <div>你已查看所有待办</div>
           </div>
-          <div class="tabs-message-list-clear">清空待办</div>
+          <div class="tabs-message-list-clear" @click="clear('todos')">清空待办</div>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -163,9 +141,19 @@
 </template>
 
 <script>
+import { getUnreadMesages } from '@/api/global';
+
 export default {
+  props: {
+    actived: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
+      firstActived: false, // 是否首次激活
+      loading: false,
       activeName: 'notices',
       notices: {
         list: [],
@@ -182,8 +170,50 @@ export default {
     };
   },
   methods: {
+    async getMessages() {
+      if (this.loading) {
+        return;
+      }
+
+      // 解决首次打开时, tab 没有高亮第一项
+      if (!this.firstActived) {
+        this.activeName = 'notices';
+        this.firstActived = true;
+      }
+
+      this.loading = true;
+      try {
+        console.log('getMessages');
+        const res = await getUnreadMesages();
+        this.loading = false;
+        console.log(res);
+        if (res.success) {
+          const { notices, infos, todos } = res.data;
+          this.notices.list = notices;
+          this.notices.count = notices.length;
+          this.infos.list = infos;
+          this.infos.count = infos.length;
+          this.todos.list = todos;
+          this.todos.count = todos.length;
+        }
+      } catch (error) {
+        this.loading = false;
+        console.log('getMessages catch error =>>', error);
+      }
+    },
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    /*
+     * 清空数据
+     */
+    clear(type) {
+      if (this[type].list.length === 0) {
+        return;
+      }
+
+      this[type].list = [];
+      this[type].count = 0;
     },
   },
 };
@@ -192,6 +222,10 @@ export default {
 <style lang="scss">
 .tabs-message {
   margin: -12px;
+
+  .el-loading-mask {
+    background-color: rgba(255,255,255,0.65);
+  }
 }
 .tabs-message-list {
 
@@ -210,6 +244,18 @@ export default {
     }
   }
 
+  &-empty {
+    text-align: center;
+    padding: 50px 0;
+    color: rgba(0,0,0,0.45);
+
+    .icon-svg {
+      font-size: 50px;
+    // color: rgba(0,0,0,.35);
+      margin-bottom: 15px;
+    }
+  }
+
   &-container {
     max-height: 380px;
     overflow-y: auto;
@@ -217,9 +263,15 @@ export default {
     .item {
       display: flex;
       padding: 10px 10px;
+      transition: 0.3s all;
 
       &:not(:last-child) {
         border-bottom: 1px solid #e8e8e8;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0,0,0,.095);
       }
 
       &-img {
