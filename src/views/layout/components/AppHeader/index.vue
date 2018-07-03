@@ -24,7 +24,7 @@
             @show="handleMessagePopoverShow"
           >
             <!-- message tabs -->
-            <messages ref="messages" />
+            <messages ref="messages" @syncUnreadCount="handleSyncUnreadCount" />
             <el-badge slot="reference" :value="unreadCount" :max="99">
               <icon-svg name="bell" />
             </el-badge>
@@ -97,6 +97,13 @@ export default {
     handleMessagePopoverShow() {
       // 加载数据
       this.$refs.messages.getMessages();
+    },
+    /*
+     * 同步未读信息条数
+     */
+    handleSyncUnreadCount(count) {
+      console.log('同步未读信息条数 =>>', count);
+      this.unreadCount = count;
     },
   },
 };
