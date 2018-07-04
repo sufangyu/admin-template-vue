@@ -2,7 +2,28 @@
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
+const chalk = require('chalk')
 const path = require('path')
+const argv = require('minimist')(process.argv.slice(2))
+const proxyTables = require('./proxy.tables')
+
+const defaultProxy = 'api';
+const proxy = argv.env ? (argv.env.proxy || defaultProxy) : defaultProxy;
+
+// has proxy config from command
+if (argv.env && argv.env.proxy) {
+  if (Object.keys(proxyTables).length === 0) {
+    console.log(chalk.red(`Miss proxy config for: ${proxy}.\n`));
+  } else if (!proxyTables[proxy]) {
+    console.log(chalk.red(`Not fund proxy config for: ${proxy}! Will use default proxy config: ${defaultProxy}\n`));
+  }
+}
+
+const proxyTable = proxyTables[proxy] || proxyTables[defaultProxy] || {};
+if (proxyTable[`/${defaultProxy}`]) {
+  const proxyTarget = proxyTable[`/${defaultProxy}`].target;
+  console.log(chalk.cyan(`Request proxy to ${proxyTarget}\n`));
+}
 
 module.exports = {
   dev: {
@@ -10,14 +31,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/api': {
-        target: 'http://localhost:9090',
-        changeOrigin: true,
-        secure: false,
-        pathRewrite: {}
-      }
-    },
+    proxyTable: proxyTable,
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

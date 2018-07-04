@@ -1,6 +1,6 @@
-# vv__admin
+# admin-template-vue
 
-> vv voice admin
+> has roles admin templates
 
 ## Build Setup
 
@@ -10,6 +10,10 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
+
+# serve with hot reload at localhost:8080, set request proxy
+npm start -- -- --env.proxy=**
+npm run dev -- --env.proxy=**
 
 # build for production with minification
 npm run build
