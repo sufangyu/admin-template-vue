@@ -7,7 +7,7 @@ const path = require('path')
 const argv = require('minimist')(process.argv.slice(2))
 const proxyTables = require('./proxy.tables')
 
-const defaultProxy = 'api';
+const defaultProxy = 'local';
 const proxy = argv.env ? (argv.env.proxy || defaultProxy) : defaultProxy;
 
 // has proxy config from command

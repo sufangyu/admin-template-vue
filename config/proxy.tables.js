@@ -8,7 +8,7 @@
 'use strict'
 
 module.exports = {
-  api: {
+  local: {
     '/api': {
       target: 'http://localhost:9090',
       changeOrigin: true,
