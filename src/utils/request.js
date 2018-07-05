@@ -15,7 +15,8 @@ const request = (defaults = {}) => {
       'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': defaults.contentType || 'application/json;charset=utf-8',
     },
-    timeout: defaults.timeout || 50000,
+    timeout: defaults.timeout || 50000, // 超时设置
+    cache: false, // 是否缓存页面
   });
 
   // request interceptor
@@ -32,6 +33,13 @@ const request = (defaults = {}) => {
       const token = getToken();
       if (token) {
         config.headers['Access-Token'] = token;
+      }
+
+      // GET 请求设置时间戳参数, 解决缓存问题
+      if (config.method === 'get' && !config.cache) {
+        const timestamp = +new Date();
+        const preSymbol = /\?/.test(config.url) ? '&' : '?';
+        config.url += `${preSymbol}_=${timestamp}`;
       }
 
       return config;
@@ -97,12 +105,13 @@ const request = (defaults = {}) => {
           message: error.message,
           onClose: () => {
             console.log('重定向到登录页面');
-            router.replace('/login');
             removeToken();
+            router.replace('/login');
+            // 重新刷新页面, 初始化 vue 的状态
             window.location.reload();
           },
         });
-        return Promise.reject(error);
+        return Promise.resolve(error);
       }
 
       Message.error(error.message);
