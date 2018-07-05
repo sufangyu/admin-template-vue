@@ -16,11 +16,28 @@
             <icon-svg name="help" />
           </a>
         </el-tooltip>
+
         <el-tooltip effect="dark" content="全屏" placement="bottom">
           <span class="action action-fullscreen">
             <fullscreen />
           </span>
         </el-tooltip>
+
+        <!-- 切换语言. 超过2种语言配置才显示 -->
+        <div class="action" v-if="languages.length > 1">
+          <el-dropdown class="account" trigger="hover" placement="top">
+            <div class="language-change">
+              <icon-svg name="language" />
+            </div>
+            <el-dropdown-menu slot="dropdown" placement="bottom-end">
+              <el-dropdown-item v-for="item in languages" :key="item.lang">
+                <span @click="setLanguage(item.lang)">{{item.name}}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+
+        <!-- 全局通知信息 -->
         <div class="action">
           <el-popover
             placement="bottom"
@@ -35,6 +52,8 @@
             </el-badge>
           </el-popover>
         </div>
+
+        <!-- 账户操作 -->
         <div class="action">
           <el-dropdown class="account" trigger="hover" placement="top">
             <div class="account-content">
@@ -66,8 +85,11 @@
 import { mapGetters } from 'vuex';
 import IconSvg from '@/components/IconSvg';
 import Fullscreen from '@/components/Fullscreen';
+import langConfig from '@/lang/config';
 import Hamburger from './Hamburger';
 import Messages from './Messages';
+
+console.log('langConfig =>>', langConfig);
 
 export default {
   name: 'appHeader',
@@ -80,6 +102,7 @@ export default {
   data() {
     return {
       unreadCount: 10,
+      languages: langConfig,
     };
   },
   computed: {
@@ -99,14 +122,21 @@ export default {
       location.reload();
     },
     /**
-     * 信息弹出框 显示
+     * 设置 语言
+     */
+    setLanguage(lang) {
+      this.$i18n.locale = lang;
+      this.$store.dispatch('setLanguage', lang);
+    },
+    /**
+     * 显示 信息弹出框
      */
     handleMessagePopoverShow() {
       // 加载数据
       this.$refs.messages.getMessages();
     },
     /*
-     * 同步未读信息条数
+     * 同步 未读信息条数
      */
     handleSyncUnreadCount(count) {
       console.log('同步未读信息条数 =>>', count);
@@ -204,6 +234,17 @@ export default {
       .action {
         font-size: 22px;
       }
+    }
+
+    .language-change {
+      cursor: pointer;
+      position: relative;
+      font-size: 22px;
+      top: -1px;
+      color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .account {

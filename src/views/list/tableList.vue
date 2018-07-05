@@ -69,7 +69,11 @@
           </el-form-item>
 
           <el-form-item class="form-buttons">
-            <el-button @click="submitQueryForm('queryForm')" type="primary">查询</el-button>
+            <el-button
+              type="primary"
+              :loading="loading"
+              @click="submitQueryForm('queryForm')"
+            >查询</el-button>
             <el-button @click="resetQueryForm('queryForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -145,7 +149,7 @@
             >
               <template slot-scope="scope">
                 <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                <span style="margin-left: 6px">{{ scope.row.date }}</span>
               </template>
             </el-table-column>
 
@@ -160,6 +164,7 @@
             <el-table-column
               label="地址"
               prop="address"
+              min-width="250"
             >
             </el-table-column>
 
@@ -370,6 +375,7 @@ export default {
     // 重置
     resetQueryForm(formName) {
       this.$refs[formName].resetFields();
+      this.getList();
     },
     // 表格勾选
     handleSelectionChange(val) {
