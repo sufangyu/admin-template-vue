@@ -1,5 +1,5 @@
 <template>
-  <div class="app-layou-header">
+  <div class="app-layout-header">
     <header class="header">
       <router-link to="/" class="logo" v-if="device === 'mobile'">
         <img src="@/assets/logo.png" alt="" />
@@ -12,9 +12,14 @@
       />
       <div class="header-right">
         <el-tooltip effect="dark" content="使用文档" placement="bottom">
-          <a href="https://www.baidu.com" target="_blank" class="action">
+          <a href="https://www.baidu.com" target="_blank" class="action action-document">
             <icon-svg name="help" />
           </a>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="全屏" placement="bottom">
+          <span class="action action-fullscreen">
+            <fullscreen />
+          </span>
         </el-tooltip>
         <div class="action">
           <el-popover
@@ -60,6 +65,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import IconSvg from '@/components/IconSvg';
+import Fullscreen from '@/components/Fullscreen';
 import Hamburger from './Hamburger';
 import Messages from './Messages';
 
@@ -68,6 +74,7 @@ export default {
   components: {
     IconSvg,
     Hamburger,
+    Fullscreen,
     Messages,
   },
   data() {
@@ -112,7 +119,7 @@ export default {
 <style lang="scss">
 @import '../../../../styles/var.scss';
 
-.app-layou-header {
+.app-layout-header {
   position: relative;
   z-index: 100;
   background-color: #fff;
@@ -223,7 +230,7 @@ export default {
 }
 
 @media only screen and (max-width: 768px) {
-  .app-layou-header {
+  .app-layout-header {
 
     .header {
       .hamburger {
@@ -233,6 +240,10 @@ export default {
         .name {
           display: none;
          }
+      }
+      .action-fullscreen,
+      .action-document {
+        display: none;
       }
     }
 
