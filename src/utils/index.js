@@ -89,3 +89,44 @@ export function getQueryObject(url) {
   });
   return obj;
 }
+
+
+/**
+ * 序列化 对象
+ *
+ * @export
+ * @param {string} [query='{}']
+ * @returns
+ */
+export function serialize(query = '{}') {
+  const temp = [];
+  for (const key in query) {
+    if (Object.hasOwnProperty.call(query, key)) {
+      const enValue = encodeURIComponent(query[key]);
+      temp.push(`${key}=${enValue}`);
+    }
+  }
+  return temp.join('&');
+}
+
+
+/**
+ * 反序列化 字符串
+ *
+ * @export
+ * @param {object} [query={}]
+ * @returns
+ */
+export function deserialize(query = {}) {
+  // 参数为空 或者 为空对象返回空对象
+  if (!query || JSON.stringify(query) === '{}') {
+    return {};
+  }
+
+  const reg = /([^=&\s]+)[=\s]*([^&\s]*)/g;
+  const obj = {};
+  while (reg.exec(query)) {
+    obj[RegExp.$1] = decodeURIComponent(RegExp.$2);
+  }
+  return obj;
+}
