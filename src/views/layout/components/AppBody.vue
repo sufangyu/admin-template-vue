@@ -5,7 +5,8 @@
       <page-info />
     </div>
     <div class="page-content">
-      <transition name="fade" mode="out-in">
+      <!-- name=fade/fade-transform -->
+      <transition name="fade-transform" mode="out-in">
         <keep-alive :include="cachedViews">
           <router-view></router-view>
         </keep-alive>
@@ -43,6 +44,7 @@ export default {
 .app-layout-body {
   height: calc(100% - 64px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .page-header {
   background: #fff;

@@ -16,7 +16,7 @@
           <el-form-item label="关键词" prop="value">
             <el-input
               class="input-with-select"
-              placeholder="输入关键词"
+              placeholder="关键词"
               v-model="query.value"
             >
               <el-select
@@ -63,7 +63,7 @@
 
           <el-form-item label="审批人" prop="approver">
             <el-input
-              placeholder="输入审批人"
+              placeholder="审批人"
               v-model="query.approver"
             ></el-input>
           </el-form-item>
@@ -296,7 +296,7 @@ export default {
   data() {
     return {
       query: {
-        type: '1',
+        type: '',
         value: '',
         status: '',
         date: '',
@@ -374,6 +374,9 @@ export default {
     },
     // 重置
     resetQueryForm(formName) {
+      if (this.loading) {
+        return;
+      }
       this.$refs[formName].resetFields();
       this.getList();
     },
