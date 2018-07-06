@@ -154,6 +154,19 @@ server.get('/api/messages/unread', (req, res) => {
   });
 });
 
+// 上传图片
+server.post('/api/upload/avatar', (req, res) => {
+  const body = req.body;
+  console.log(body);
+
+  setTimeout(() => {
+    res.send({
+      success: true,
+      message: 'success',
+    });
+  }, 1500);
+});
+
 
 server.use(router);
 

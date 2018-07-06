@@ -21,11 +21,19 @@ export default {
       },
     },
     {
+      path: 'avatar-upload',
+      name: 'componentsAvatarUpload',
+      component: () => import('@/views/components-demo/avatarUpload'),
+      meta: {
+        title: '头像上传',
+      },
+    },
+    {
       path: 'count-to',
       name: 'componentsCountTo',
       component: () => import('@/views/components-demo/countTo'),
       meta: {
-        title: 'CountTo',
+        title: '计数效果',
       },
     },
   ],
