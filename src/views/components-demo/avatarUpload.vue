@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar-upload-example">
+  <div class="avatar-upload-demo">
     <el-card shadow="hover" class="card-bottom card-header-border-none">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">个人资料</h3>
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss">
-.avatar-upload-example {
+.avatar-upload-demo {
 
   .avatar-wrapper {
     display: flex;

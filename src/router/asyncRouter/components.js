@@ -21,6 +21,14 @@ export default {
       },
     },
     {
+      path: 'markdown',
+      name: 'componentsMarkdown',
+      component: () => import('@/views/components-demo/markdown'),
+      meta: {
+        title: 'Markdown编辑器',
+      },
+    },
+    {
       path: 'avatar-upload',
       name: 'componentsAvatarUpload',
       component: () => import('@/views/components-demo/avatarUpload'),
