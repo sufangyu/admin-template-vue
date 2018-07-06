@@ -89,8 +89,6 @@ import langConfig from '@/lang/config';
 import Hamburger from './Hamburger';
 import Messages from './Messages';
 
-console.log('langConfig =>>', langConfig);
-
 export default {
   name: 'appHeader',
   components: {
