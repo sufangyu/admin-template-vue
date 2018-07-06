@@ -1,11 +1,19 @@
 <template>
   <div class="avatar-upload-example">
-    <div class="avatar-wrapper">
-      <img class="avatar" v-show="avatar" :src="avatar" />
-      <div class="avatar-upload">
-        <el-button type="primary" @click="toggleShow">设置头像</el-button>
+    <el-card shadow="hover" class="card-bottom card-header-border-none">
+      <div slot="header" class="card-header clearfix">
+        <h3 class="card-header-title">个人资料</h3>
       </div>
-    </div>
+      <div class="avatar-wrapper">
+        <img class="avatar" v-show="avatar" :src="avatar" />
+        <div class="avatar-upload">
+          <p class="hint">支持 jpg、png 格式大小 5M 以内的图片</p>
+          <el-button type="primary" @click="toggleShow">设置头像</el-button>
+        </div>
+      </div>
+    </el-card>
+
+    <!-- 上传组件 -->
     <avatar-upload
       v-model="uploadShow"
       field="avatar"
@@ -48,7 +56,7 @@ export default {
       this.uploadShow = !this.uploadShow;
     },
     // 图片截取完成事件（上传前), 参数(image, field)
-    handleCropSuccess(image,) {
+    handleCropSuccess(image) {
       this.avatarTemp = image;
     },
     // 上传成功， 参数(jsonData, field)
@@ -69,22 +77,21 @@ export default {
 .avatar-upload-example {
 
   .avatar-wrapper {
-    width: 180px;
+    display: flex;
 
     img.avatar {
       display: block;
-      width: 180px;
-      height: 180px;
+      width: 120px;
+      height: 120px;
       border-radius: 3px;
       background-color: rgba(0, 0, 0, 0.09);
     }
 
     .avatar-upload {
-      width: 100%;
-      margin-top: 15px;
+      margin-left: 25px;
 
-      .el-button {
-        width: 100%;
+      .hint {
+        margin-bottom: 15px;
       }
     }
   }
