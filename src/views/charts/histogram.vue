@@ -1,49 +1,49 @@
 <template>
   <div class="chart-demo">
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">基础示例</h3>
       </div>
       <ve-histogram :data="chartData"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">设置显示的指标维度</h3>
       </div>
       <ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">柱状图+折线图</h3>
       </div>
       <ve-histogram :data="chartData" :settings="chartSettings2"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">堆叠柱状图</h3>
       </div>
       <ve-histogram :data="chartData" :settings="chartSettings3"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">默认显示柱状图数据</h3>
       </div>
       <ve-histogram :data="chartData" :extend="extend"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">设置别名</h3>
       </div>
       <ve-histogram :data="chartData2" :settings="chartSettings4"></ve-histogram>
     </el-card>
 
-    <el-card shadow="hover" class="card-bottom">
+    <el-card shadow="hover" class="el-card card-bottom card-header-border-none is-hover-shadow">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">设置横轴为连续的数值轴</h3>
       </div>

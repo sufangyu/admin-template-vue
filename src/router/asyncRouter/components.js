@@ -45,9 +45,9 @@ export default {
       },
     },
     {
-      path: 'tag-status',
+      path: 'status',
       name: 'componentsTagStatus',
-      component: () => import('@/views/components-demo/tagStatus'),
+      component: () => import('@/views/components-demo/status'),
       meta: {
         title: '状态标签',
       },
