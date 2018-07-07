@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import ElementUI from 'element-ui';
+import VCharts from 'v-charts';
 import 'element-ui/lib/theme-chalk/index.css';
 import IconSvg from '@/components/IconSvg';
 
@@ -27,10 +28,13 @@ Object.keys(directives).forEach((key) => {
   Vue.directive(key, directives[key]);
 });
 
-// register global component
+// use components
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value),
 });
+Vue.use(VCharts);
+
+// register global components
 Vue.component('icon-svg', IconSvg);
 
 

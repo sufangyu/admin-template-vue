@@ -44,5 +44,13 @@ export default {
         title: '计数效果',
       },
     },
+    {
+      path: 'tag-status',
+      name: 'componentsTagStatus',
+      component: () => import('@/views/components-demo/tagStatus'),
+      meta: {
+        title: '状态标签',
+      },
+    },
   ],
 };

@@ -43,6 +43,10 @@ router.beforeEach(async (to, from, next) => {
           next({ ...to, replace: true });
         }
       } else {
+        if (to.matched.length === 0) {
+          // 没有匹配到路由
+          next({ path: '/404' });
+        }
         // 已获取用户信息
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           // 有访问权限
