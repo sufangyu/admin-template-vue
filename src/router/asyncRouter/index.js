@@ -3,6 +3,7 @@ import list from './list';
 import result from './result';
 import charts from './charts';
 import components from './components';
+import table from './table';
 import clipboard from './clipboard';
 import excel from './excel';
 import zip from './zip';
@@ -15,6 +16,7 @@ export default [
   result,
   charts,
   components,
+  table,
   clipboard,
   excel,
   zip,
