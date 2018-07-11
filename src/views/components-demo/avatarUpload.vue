@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import AvatarUpload from 'vue-image-crop-upload/upload-2.vue';
+import AvatarUpload from 'vue-image-crop-upload/upload-2';
 
 export default {
   components: {

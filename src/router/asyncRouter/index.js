@@ -1,14 +1,15 @@
-import form from './form';
-import list from './list';
-import result from './result';
-import charts from './charts';
-import components from './components';
-import table from './table';
-import clipboard from './clipboard';
-import excel from './excel';
-import zip from './zip';
-import auth from './auth';
-import i18n from './i18n';
+import form from './modules/form';
+import list from './modules/list';
+import result from './modules/result';
+import charts from './modules/charts';
+import components from './modules/components';
+import table from './modules/table';
+import clipboard from './modules/clipboard';
+import excel from './modules/excel';
+import zip from './modules/zip';
+import auth from './modules/auth';
+import i18n from './modules/i18n';
+import notFound from './modules/notFound';
 
 export default [
   form,
@@ -22,4 +23,5 @@ export default [
   zip,
   auth,
   i18n,
+  notFound,
 ];
