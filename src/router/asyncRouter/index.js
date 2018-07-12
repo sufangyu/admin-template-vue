@@ -9,6 +9,7 @@ import excel from './modules/excel';
 import zip from './modules/zip';
 import auth from './modules/auth';
 import i18n from './modules/i18n';
+import exception from './modules/exception';
 import notFound from './modules/notFound';
 
 export default [
@@ -23,5 +24,6 @@ export default [
   zip,
   auth,
   i18n,
+  exception,
   notFound,
 ];
