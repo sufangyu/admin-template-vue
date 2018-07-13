@@ -10,7 +10,10 @@ import BASE_API from './config';
  * @returns
  */
 export default function getException(status) {
-  const url = `${BASE_API}/exception?status=${status}`;
+  const query = {
+    status,
+  };
+  const url = `${BASE_API}/exception`;
 
-  return http.get(url);
+  return http.get(url, query);
 }

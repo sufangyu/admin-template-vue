@@ -170,7 +170,7 @@ server.post('/api/upload/avatar', (req, res) => {
 
 // 返回异常
 server.get('/api/exception', (req, res) => {
-  const { status } = req.query;
+  const { status = 200 } = req.query;
 
   setTimeout(() => {
     res.status(status).send();

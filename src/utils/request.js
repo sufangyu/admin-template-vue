@@ -12,7 +12,6 @@ const request = (defaults = {}) => {
   // create an axios instance
   const instance = axios.create({
     headers: {
-      'X-Requested-With': 'XMLHttpRequest',
       'Content-Type': defaults.contentType || 'application/json;charset=utf-8',
     },
     timeout: defaults.timeout || 50000, // 超时设置
@@ -24,7 +23,7 @@ const request = (defaults = {}) => {
     (config) => {
       // 发起请求时，取消掉当前正在进行的相同请求
       if (promiseArr[config.url]) {
-        promiseArr[config.url]('操作取消');
+        promiseArr[config.url]('Cancel operation');
         promiseArr[config.url] = cancel;
       } else {
         promiseArr[config.url] = cancel;
@@ -38,8 +37,7 @@ const request = (defaults = {}) => {
       // GET 请求设置时间戳参数, 解决缓存问题
       if (config.method === 'get' && !config.cache) {
         const timestamp = +new Date();
-        const preSymbol = /\?/.test(config.url) ? '&' : '?';
-        config.url += `${preSymbol}_=${timestamp}`;
+        config.params._ = timestamp;
       }
 
       return config;
@@ -96,30 +94,37 @@ const request = (defaults = {}) => {
             error.message = `连接错误${error.response.status}`;
         }
       } else {
-        error.message = '连接到服务器失败';
+        error.message = error.message || '连接到服务器失败';
       }
 
-      const { status, statusText } = error.response;
-      if (status === 401) {
-        Message.error({
+      try {
+        const { status, statusText } = error.response;
+        if (status === 401) {
+          Message.error({
+            message: error.message,
+            onClose: () => {
+              removeToken();
+              router.replace('/login');
+              // 重新刷新页面, 初始化 vue 的状态
+              window.location.reload();
+            },
+          });
+          return Promise.resolve(error);
+        }
+
+        Message.error(error.message);
+        return Promise.resolve({
+          status,
+          statusText,
           message: error.message,
-          onClose: () => {
-            console.log('重定向到登录页面');
-            removeToken();
-            router.replace('/login');
-            // 重新刷新页面, 初始化 vue 的状态
-            window.location.reload();
-          },
         });
-        return Promise.resolve(error);
+      } catch (err) {
+        return Promise.reject({
+          status: 'canceled',
+          statusText: 'Cancel operation',
+          message: error.message,
+        });
       }
-
-      Message.error(error.message);
-      return Promise.resolve({
-        status,
-        statusText,
-        message: error.message,
-      });
     },
   );
 
@@ -128,20 +133,74 @@ const request = (defaults = {}) => {
 
 
 const http = {
-  get(url, params, options) {
+  /**
+   * GET 请求
+   *
+   * @param {*} url 地址
+   * @param {*} params 查询参数
+   * @param {*} options axios 配置
+   * @return {*}
+   */
+  get(url = '', query = {}, options = {}) {
     const config = Object.assign({}, {
       method: 'GET',
       url,
-      data: params,
+      params: query,
       cancelToken: new CancelToken((c) => {
         cancel = c;
       }),
     }, options);
     return request(config);
   },
-  post: (url, data, options) => {
+  /**
+   * POST 请求
+   *
+   * @param {*} url 地址
+   * @param {*} data 提交数据
+   * @param {*} options axios 配置
+   * @return {*}
+   */
+  post: (url = '', data = {}, options = {}) => {
     const config = Object.assign({}, {
       method: 'POST',
+      url,
+      data,
+      cancelToken: new CancelToken((c) => {
+        cancel = c;
+      }),
+    }, options);
+    return request(config);
+  },
+  /**
+   * DELETE 请求
+   *
+   * @param {*} url 地址
+   * @param {*} query 提交数据
+   * @param {*} options axios 配置
+   * @return {*}
+   */
+  delete: (url = '', query = {}, options = {}) => {
+    const config = Object.assign({}, {
+      method: 'DELETE',
+      url,
+      query,
+      cancelToken: new CancelToken((c) => {
+        cancel = c;
+      }),
+    }, options);
+    return request(config);
+  },
+  /**
+   * PUT 请求
+   *
+   * @param {*} url 地址
+   * @param {*} data 提交数据
+   * @param {*} options axios 配置
+   * @return {*}
+   */
+  put: (url = '', data = {}, options = {}) => {
+    const config = Object.assign({}, {
+      method: 'PUT',
       url,
       data,
       cancelToken: new CancelToken((c) => {
