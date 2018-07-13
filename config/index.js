@@ -9,6 +9,7 @@ const proxyTables = require('./proxy.tables')
 
 const defaultProxy = 'local';
 const proxy = argv.env ? (argv.env.proxy || defaultProxy) : defaultProxy;
+const proxyTable = proxyTables[proxy] || proxyTables[defaultProxy] || {};
 
 // has proxy config from command
 if (argv.env && argv.env.proxy) {
@@ -19,9 +20,8 @@ if (argv.env && argv.env.proxy) {
   }
 }
 
-const proxyTable = proxyTables[proxy] || proxyTables[defaultProxy] || {};
-if (proxyTable[`/${defaultProxy}`]) {
-  const proxyTarget = proxyTable[`/${defaultProxy}`].target;
+if (proxyTable['/api']) {
+  const proxyTarget = proxyTable['/api'].target;
   console.log(chalk.cyan(`Request proxy to ${proxyTarget}\n`));
 }
 
