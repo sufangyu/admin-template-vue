@@ -5,13 +5,23 @@ export default {
   path: '/exception',
   name: 'exception',
   component: Layout,
-  redirect: 'exception/401',
+  redirect: 'exception/index',
   alwaysShow: true,
   meta: {
     title: '异常页',
     icon: 'exception',
   },
   children: [
+    {
+      path: 'index',
+      name: 'exceptionIndex',
+      component: () => import('@/views/exception/index'),
+      meta: {
+        title: '请求异常',
+        breadcrumb: false,
+        pageInfo: false,
+      },
+    },
     {
       path: '401',
       name: 'exception401',

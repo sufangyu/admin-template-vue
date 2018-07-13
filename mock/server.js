@@ -168,6 +168,16 @@ server.post('/api/upload/avatar', (req, res) => {
 });
 
 
+// 返回异常
+server.get('/api/exception', (req, res) => {
+  const { status } = req.query;
+
+  setTimeout(() => {
+    res.status(status).send();
+  }, 1500);
+});
+
+
 server.use(router);
 
 server.listen(9090, () => {
