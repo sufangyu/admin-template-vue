@@ -52,5 +52,13 @@ export default {
         title: '状态标签',
       },
     },
+    {
+      path: 'sticky',
+      name: 'componentsSticky',
+      component: () => import('@/views/components-demo/sticky'),
+      meta: {
+        title: '滚动吸附',
+      },
+    },
   ],
 };
