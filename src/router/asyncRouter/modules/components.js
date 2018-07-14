@@ -1,4 +1,4 @@
-// zip 导出导入
+// 组件示例
 import Layout from '@/views/layout/';
 
 export default {

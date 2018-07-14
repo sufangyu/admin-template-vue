@@ -28,5 +28,21 @@ export default {
         title: '拖拽表格',
       },
     },
+    {
+      path: 'tree-table',
+      name: 'treeTable',
+      component: () => import('@/views/table/treeTable'),
+      meta: {
+        title: '树形表格',
+      },
+    },
+    {
+      path: 'custom-tree-table',
+      name: 'customTreeTable',
+      component: () => import('@/views/table/customTreeTable'),
+      meta: {
+        title: '自定义树表',
+      },
+    },
   ],
 };

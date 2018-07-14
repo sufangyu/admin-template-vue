@@ -1,4 +1,4 @@
-// zip 导出导入
+// 异常页
 import Layout from '@/views/layout/';
 
 export default {
