@@ -29,6 +29,14 @@ export default {
       },
     },
     {
+      path: 'inline-edit-table',
+      name: 'inlineEditTable',
+      component: () => import('@/views/table/inlineEditTable'),
+      meta: {
+        title: '表格内编辑',
+      },
+    },
+    {
       path: 'tree-table',
       name: 'treeTable',
       component: () => import('@/views/table/treeTable'),

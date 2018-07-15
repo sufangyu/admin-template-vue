@@ -45,6 +45,14 @@ export default {
       },
     },
     {
+      path: 'large-list',
+      name: 'largeList',
+      component: () => import('@/views/list/largeList'),
+      meta: {
+        title: '大量数据列表',
+      },
+    },
+    {
       path: '/list/search',
       name: 'searchList',
       redirect: 'list/search/articles',
