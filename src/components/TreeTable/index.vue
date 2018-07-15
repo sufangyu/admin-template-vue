@@ -11,8 +11,7 @@
           <i v-if="!scope.row._expanded" class="el-icon-plus"></i>
           <i v-else class="el-icon-minus"></i>
         </span>
-        <!-- {{firstColumn.prop ? scope.row[firstColumn.prop] : scope.$index }} -->
-        {{scope.$index }}
+        {{firstColumn.prop ? scope.row[firstColumn.prop] : scope.$index }}
       </template>
     </el-table-column>
 
