@@ -10,6 +10,7 @@ import zip from './modules/zip';
 import auth from './modules/auth';
 import i18n from './modules/i18n';
 import exception from './modules/exception';
+import admin from './modules/admin';
 import notFound from './modules/notFound';
 
 export default [
@@ -25,5 +26,6 @@ export default [
   auth,
   i18n,
   exception,
+  admin,
   notFound,
 ];

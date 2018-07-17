@@ -121,6 +121,7 @@ html {
 
   .card-header {
     display: flex;
+    align-items: center;
 
     &-title {
       flex: 1;
@@ -153,6 +154,46 @@ html {
 }
 .el-step__description.is-process {
   color: #808080;
+}
+
+
+/* dialog 弹窗 */
+.dialog-full {
+  .el-dialog {
+    max-width: 860px;
+  }
+
+  &-large {
+    .el-dialog {
+      max-width: 1200px;
+    }
+  }
+
+  &-medium {
+    .el-dialog {
+      max-width: 860px;
+    }
+  }
+
+  &-small {
+    .el-dialog {
+      max-width: 640px;
+    }
+  }
+
+  &-min {
+    .el-dialog {
+      max-width: 320px;
+    }
+  }
+}
+
+
+/* 表单 */
+.form-label-min {
+  .el-form-item__label {
+    line-height: 20px;
+  }
 }
 
 

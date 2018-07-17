@@ -178,6 +178,121 @@ server.get('/api/exception', (req, res) => {
 });
 
 
+// 权限菜单 - 获取列表
+server.get('/api/admin/menus', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus.json')));
+  const menus = DB.get('menus').value();
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: menus,
+  });
+});
+// 权限菜单 - 添加
+server.post('/api/admin/menus', (req, res) => {
+  const { name, parentId, unique, extraRules = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus.json')));
+  const menu = DB.get('menus')
+    .find({ unique })
+    .value();
+
+  if (menu) {
+    res.send({
+      success: false,
+      message: '菜单唯一标识已存在',
+    });
+  } else {
+    console.log('extraRules =>>', extraRules);
+    console.log('req.body.extraRules =>>', req.body.extraRules);
+    const newMenus = {
+      id: UUID.v1(),
+      name,
+      parentId,
+      unique,
+      extraRules,
+      created_at: new Date(),
+    };
+
+    DB.get('menus')
+      .push(newMenus)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 权限菜单 - 编辑
+server.put('/api/admin/menus/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, parentId, unique, extraRules = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus.json')));
+  const menu = DB.get('menus')
+    .find({ id })
+    .value();
+
+  const menuSameUnique = DB.get('menus')
+    .filter({ id: !id })
+    .find({ unique })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '权限菜单不存在',
+    });
+  } else if (menuSameUnique) {
+    res.send({
+      success: false,
+      message: '菜单唯一标识已存在',
+    });
+  } else {
+    const newMenus = {
+      id,
+      name,
+      parentId,
+      unique,
+      extraRules,
+    };
+    DB.get('menus')
+      .find({ id })
+      .assign(newMenus)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 权限菜单 - 删除
+server.delete('/api/admin/menus/:id', (req, res) => {
+  const { id } = req.params;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus.json')));
+  const menu = DB.get('menus')
+    .find({ id })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '权限菜单不存在',
+    });
+  } else {
+    DB.get('menus')
+      .remove({ id })
+      .write();
+
+    res.send({
+      success: true,
+      message: '删除成功',
+    });
+  }
+});
+
+
 server.use(router);
 
 server.listen(9090, () => {
