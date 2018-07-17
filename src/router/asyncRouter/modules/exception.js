@@ -5,7 +5,7 @@ export default {
   path: '/exception',
   name: 'exception',
   component: Layout,
-  redirect: 'exception/index',
+  redirect: '/exception/index',
   alwaysShow: true,
   meta: {
     title: '异常页',

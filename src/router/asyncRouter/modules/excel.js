@@ -5,7 +5,7 @@ export default {
   path: '/excel',
   name: 'excel',
   component: Layout,
-  redirect: 'excel/export-excel',
+  redirect: '/excel/export-excel',
   alwaysShow: true,
   meta: {
     title: 'Excel',

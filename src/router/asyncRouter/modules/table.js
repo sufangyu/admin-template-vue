@@ -5,7 +5,7 @@ export default {
   path: '/table',
   name: 'table',
   component: Layout,
-  redirect: 'table/dynamic-table',
+  redirect: '/table/dynamic-table',
   alwaysShow: true,
   meta: {
     title: '表格',

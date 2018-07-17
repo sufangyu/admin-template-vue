@@ -5,7 +5,7 @@ export default [
     path: '/labs',
     name: 'labs',
     component: Layout,
-    redirect: 'labs/tree',
+    redirect: '/labs/tree',
     alwaysShow: true,
     meta: {
       icon: 'labs',

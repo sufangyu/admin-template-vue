@@ -8,13 +8,14 @@
         v-if='item.meta.title'
       >
         <span
-          v-if='item.redirect === "noredirect" || index==levelList.length-1'
+          v-if='item.redirect === "noredirect" || index == levelList.length - 1'
           class="no-redirect"
         >
           {{item.meta.title}}
         </span>
         <router-link
-          v-else :to="item.redirect ? `/${item.redirect}` : item.path"
+          v-else
+          :to="item.redirect ? item.redirect : item.path"
           :data-redirect="item.redirect"
           :data-path="item.path"
         >
@@ -42,12 +43,19 @@ export default {
   },
   methods: {
     getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name);
+      let matched = this.$route.matched.filter((item, index) => {
+        if (this.$route.matched[index - 1]) {
+          // 超过 2 项, 则返回不相同 title 项
+          return item.name && item.meta.title !== this.$route.matched[index - 1].meta.title;
+        }
+        return item.name;
+        // return item.name && item.meta.title !== this.$route.matched[index - 1].meta.title;
+      });
       const first = matched[0];
       if (first && first.name !== 'dashboard') {
-        // matched = [{ path: '/dashboard', meta: { title: 'dashboard' } }].concat(matched);
         matched = [].concat(matched);
       }
+      console.log(matched);
       this.levelList = matched;
     },
   },

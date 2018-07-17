@@ -5,7 +5,7 @@ export default {
   path: '/charts',
   name: 'charts',
   component: Layout,
-  redirect: 'charts/line',
+  redirect: '/charts/line',
   alwaysShow: true,
   meta: {
     title: '可视化图表',
@@ -61,7 +61,7 @@ export default {
       path: '/charts/more',
       name: 'moreChart',
       component: LayoutEmpty,
-      redirect: 'charts/more/event',
+      redirect: '/charts/more/event',
       alwaysShow: true,
       meta: {
         title: '更多',

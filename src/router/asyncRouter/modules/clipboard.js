@@ -5,7 +5,7 @@ export default {
   path: '/clipboard',
   name: 'clipboard',
   component: Layout,
-  redirect: 'clipboard/index',
+  redirect: '/clipboard/index',
   alwaysShow: true,
   meta: {
     title: '复制剪贴板',

@@ -5,7 +5,7 @@ export default {
   path: '/zip',
   name: 'zip',
   component: Layout,
-  redirect: 'zip/index',
+  redirect: '/zip/index',
   alwaysShow: true,
   meta: {
     title: 'Zip',

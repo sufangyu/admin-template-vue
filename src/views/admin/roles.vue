@@ -1,8 +1,8 @@
 <template>
-  <div class="admin-menu">
+  <div class="admin-roles">
     <el-card shadow="hover" class="card-bottom card-header-border-none">
       <div slot="header" class="card-header clearfix">
-        <h3 class="card-header-title">菜单列表</h3>
+        <h3 class="card-header-title">角色列表</h3>
         <div class="card-header-extra">
           <el-button
             type="primary"
@@ -396,29 +396,4 @@ export default {
 </script>
 
 <style lang="scss">
-.admin-menu {
-  .form-extra-rule {
-    display: flex;
-    align-items: center;
-
-    .spe-line {
-      display: inline-block;
-      width: 50px;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .el-button {
-      margin-left: 15px;
-    }
-  }
-
-  .rule-list {
-    text-align: left;
-
-    .el-tag {
-      margin: 0 5px;
-    }
-  }
-}
 </style>

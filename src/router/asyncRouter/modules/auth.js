@@ -5,7 +5,7 @@ export default {
   path: '/auth',
   name: '权限控制',
   component: Layout,
-  redirect: 'auth/index',
+  redirect: '/auth/index',
   meta: {
     title: '权限控制',
     icon: 'auth',

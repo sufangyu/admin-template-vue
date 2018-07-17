@@ -5,7 +5,7 @@ export default {
   path: '/list',
   name: 'list',
   component: Layout,
-  redirect: 'list/table-list',
+  redirect: '/list/table-list',
   alwaysShow: true,
   meta: {
     title: '列表页',
@@ -55,7 +55,7 @@ export default {
     {
       path: '/list/search',
       name: 'searchList',
-      redirect: 'list/search/articles',
+      redirect: '/list/search/articles',
       component: LayoutEmpty,
       meta: {
         title: '三级菜单',

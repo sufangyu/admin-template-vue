@@ -4,7 +4,7 @@ export default [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/dashboard',
     children: [{
       path: 'dashboard',
       name: 'dashboard',

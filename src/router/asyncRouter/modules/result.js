@@ -5,7 +5,7 @@ export default {
   path: '/result',
   name: 'result',
   component: Layout,
-  redirect: 'result/success',
+  redirect: '/result/success',
   alwaysShow: true,
   meta: {
     title: '结果页',

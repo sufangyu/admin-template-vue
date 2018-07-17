@@ -5,7 +5,7 @@ export default {
   path: '/components',
   name: 'components',
   component: Layout,
-  redirect: 'components/tinymce',
+  redirect: '/components/tinymce',
   alwaysShow: true,
   meta: {
     title: '组件',
