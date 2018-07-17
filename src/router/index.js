@@ -2,6 +2,12 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import constantRouterMap from './constantRouter';
 import asyncRouterMap from './asyncRouter';
+import labsRouterMap from './labsRouter';
+
+// 开发环境的 labs 路由
+if (process.env.NODE_ENV === 'development') {
+  constantRouterMap.push(...labsRouterMap);
+}
 
 Vue.use(Router);
 
