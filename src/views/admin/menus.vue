@@ -289,40 +289,37 @@ export default {
         return;
       }
 
-      try {
-        const confirmResult = await this.$confirm('此操作将永久删除该菜单, 是否继续?', '提示', {
-          type: 'warning',
-        });
-        if (confirmResult !== 'confirm') {
-          return;
-        }
-
-        const fullLoading = this.$loading({
-          lock: true,
-          text: '删除中，请稍等',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)',
-        });
-
-        try {
-          const res = await delMenu(menu.id);
-          fullLoading.close();
-          if (!res.success) {
-            this.$message.error(res.message || '删除失败，请重试');
-          } else {
-            this.$message.success('删除成功');
-            this.getMenus();
-          }
-        } catch (error) {
-          console.log('handleDel error =>>', error);
-          fullLoading.close();
-          this.$message.error('删除失败，请重试');
-        }
-      } catch (error) {
-        console.log('handleDel error =>>', error);
+      const confirmResult = await this.$confirm('此操作将永久删除该菜单, 是否继续?', '提示', {
+        type: 'warning',
+      }).catch((error) => {
         if (error === 'cancel') {
           this.$message.info('已取消删除操作');
         }
+      });
+      if (confirmResult !== 'confirm') {
+        return;
+      }
+
+      const fullLoading = this.$loading({
+        lock: true,
+        text: '删除中，请稍等',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+
+      try {
+        const res = await delMenu(menu.id);
+        fullLoading.close();
+        if (!res.success) {
+          this.$message.error(res.message || '删除失败，请重试');
+        } else {
+          this.$message.success('删除成功');
+          this.getMenus();
+        }
+      } catch (error) {
+        console.log('handleDel error =>>', error);
+        fullLoading.close();
+        this.$message.error('删除失败，请重试');
       }
     },
     // 编辑菜单

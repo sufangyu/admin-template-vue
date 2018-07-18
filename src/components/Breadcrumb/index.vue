@@ -55,7 +55,6 @@ export default {
       if (first && first.name !== 'dashboard') {
         matched = [].concat(matched);
       }
-      console.log(matched);
       this.levelList = matched;
     },
   },
