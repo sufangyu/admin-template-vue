@@ -190,11 +190,29 @@ html {
 
 
 /* 表单 */
-.form-label-min {
-  .el-form-item__label {
-    line-height: 20px;
+.form {
+  max-width: 640px;
+
+  &-label-min {
+    .el-form-item__label {
+      line-height: 20px;
+    }
   }
 }
+
+
+/* 按钮 */
+.el-button--primary {
+  a {
+    color: #fff;
+
+    &:hover {
+      opacity: 0.9;
+      color: #fff;
+    }
+  }
+}
+
 
 
 /* 列表 筛选查询表单 */
@@ -260,7 +278,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 6px;
 
   &-center {
     justify-content: center;
