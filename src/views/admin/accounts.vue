@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-users">
+  <div class="admin-accounts">
     <el-card shadow="hover" class="card-bottom card-header-border-none">
       <div slot="header" class="card-header clearfix">
         <h3 class="card-header-title">查询条件</h3>
@@ -106,7 +106,7 @@
             style="width: 100%"
             ref="multipleTable"
             border
-            :data="users"
+            :data="accounts"
             v-loading="loading"
             @selection-change="handleSelectionChange"
           >
@@ -124,6 +124,15 @@
               align="center"
             >
               <template slot-scope="scope">{{scope.row.username || '-'}}</template>
+            </el-table-column>
+
+            <el-table-column
+              prop="nickname"
+              label="名称"
+              min-width="120"
+              align="center"
+            >
+              <template slot-scope="scope">{{scope.row.nickname || '-'}}</template>
             </el-table-column>
 
             <el-table-column
@@ -212,35 +221,35 @@
     <el-dialog
       :title="actionTypeName"
       :visible.sync="dialogVisible"
-      @close="resetDialogForm('userForm')"
+      @close="resetAccountDialogForm('accountForm')"
       center
       width="85%"
       class="dialog-full"
     >
       <el-form
         status-icon
-        :model="userForm"
-        :rules="userRules"
-        ref="userForm"
+        :model="accountForm"
+        :rules="rules"
+        ref="accountForm"
         label-width="100px"
         label-position="top"
         class="form-label-min"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model.number="userForm.username"></el-input>
+          <el-input v-model.number="accountForm.username"></el-input>
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model.number="userForm.password"></el-input>
+          <el-input v-model.number="accountForm.password"></el-input>
         </el-form-item>
 
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model.number="userForm.nickname"></el-input>
+          <el-input v-model.number="accountForm.nickname"></el-input>
         </el-form-item>
 
         <el-form-item label="角色" prop="role">
           <el-select
-            v-model="userForm.role"
+            v-model="accountForm.role"
             placeholder="选择权限角色"
             style="width: 100%;"
           >
@@ -256,7 +265,7 @@
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
-          <el-select v-model="userForm.status" placeholder="选择状态" style="width: 100%;">
+          <el-select v-model="accountForm.status" placeholder="选择状态" style="width: 100%;">
             <el-option label="无效" value="0"></el-option>
             <el-option label="有效" value="1"></el-option>
           </el-select>
@@ -266,7 +275,7 @@
           <el-button
             type="primary"
             :loading="submitting"
-            @click="submitUserForm('userForm')"
+            @click="submitUserForm('accountForm')"
           >确认提交</el-button>
         </el-form-item>
       </el-form>
@@ -276,7 +285,7 @@
     <el-dialog
       title="重置密码"
       :visible.sync="passwordDialogVisible"
-      @close="resetDialogForm('passwordForm')"
+      @close="resetPasswordDialogForm('passwordForm')"
       center
       width="85%"
       class="dialog-full"
@@ -309,7 +318,7 @@
 <script>
 import Status from '@/components/Status';
 import { getRoles } from '@/api/admin/roles';
-import { getUsers, createAndEditUser, delUsers, updateUser } from '@/api/admin/users';
+import { getAccounts, createAndEditAccount, delAccounts, updateAccount } from '@/api/admin/accounts';
 
 export default {
   data() {
@@ -336,7 +345,7 @@ export default {
         pageSizes: [10, 20, 30, 40],
         layout: 'total, sizes, prev, pager, next, jumper',
       },
-      users: [],
+      accounts: [],
       multipleSelection: [],
       loading: false,
       // 添加、编辑用户
@@ -344,7 +353,7 @@ export default {
       actionType: 'create', // create: 添加; edit: 编辑
       dialogVisible: false,
       roles: [],
-      userForm: {
+      accountForm: {
         id: '',
         username: '',
         password: '',
@@ -353,7 +362,7 @@ export default {
         role: '',
         roleName: '',
       },
-      userRules: {
+      rules: {
         username: [
           { required: true, message: '用户名不能为空' },
         ],
@@ -377,6 +386,7 @@ export default {
       passwordForm: {
         id: '',
         password: '',
+        account: {},
       },
       passwordRules: {
         password: [
@@ -392,8 +402,8 @@ export default {
     // 弹窗操作类型标题
     actionTypeName() {
       const actions = {
-        create: '添加用户',
-        edit: '编辑用户',
+        create: '添加账户',
+        edit: '编辑账户',
       };
 
       return actions[this.actionType];
@@ -419,17 +429,17 @@ export default {
     },
   },
   created() {
-    Promise.all([this.getRoles(), this.getUsers()]);
+    Promise.all([this.getRoles(), this.getAccounts()]);
   },
   methods: {
-    // 处理删除用户
-    async dealDelUsers(users) {
-      if (users.length === 0) {
+    // 处理删除账户
+    async dealDelAccounts(accounts) {
+      if (accounts.length === 0) {
         return;
       }
 
       // 确认弹窗
-      const confirmResult = await this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      const confirmResult = await this.$confirm('此操作将永久删除账户, 是否继续?', '提示', {
         type: 'warning',
       }).catch((error) => {
         if (error === 'cancel') {
@@ -448,13 +458,13 @@ export default {
       });
 
       try {
-        const res = await delUsers(users);
+        const res = await delAccounts(accounts);
         fullLoading.close();
         if (!res.success) {
           this.$message.error(res.message || '删除失败，请重试');
         } else {
           this.$message.success('删除成功');
-          this.getUsers();
+          this.getAccounts();
         }
       } catch (error) {
         console.log('delUsers error =>>', error);
@@ -476,7 +486,7 @@ export default {
       }
     },
     // 获取用户列表
-    async getUsers() {
+    async getAccounts() {
       const query = {
         ...this.query,
         page: this.page,
@@ -485,22 +495,22 @@ export default {
 
       this.loading = true;
       try {
-        const res = await getUsers(query);
+        const res = await getAccounts(query);
         this.loading = false;
         if (!res.success) {
           this.$message.error(res.message || '数据加载失败，请重试');
         } else {
-          this.users = res.data.list;
+          this.accounts = res.data.list;
           if (res.data.pagination) {
             console.log('set pagination');
           }
         }
       } catch (error) {
         this.loading = false;
-        console.error('getUsers errro =>>', error);
+        console.error('getAccounts errro =>>', error);
       }
     },
-    // 添加用户
+    // 添加账户
     handleCreate() {
       this.actionType = 'create';
       this.dialogVisible = true;
@@ -508,13 +518,13 @@ export default {
     },
     // 批量删除用户
     handleMultiDel() {
-      const users = this.multipleSelection.map(role => role.id);
-      this.dealDelUsers(users);
+      const accounts = this.multipleSelection.map(role => role.id);
+      this.dealDelAccounts(accounts);
     },
     // 编辑用户
-    handleEdit(user) {
-      const { id, username, password, nickname, status = '1', role, roleName } = user;
-      this.userForm = {
+    handleEdit(account) {
+      const { id, username, password, nickname, status = '1', role, roleName } = account;
+      this.accountForm = {
         id,
         username,
         password,
@@ -527,24 +537,25 @@ export default {
       this.dialogVisible = true;
     },
     // 重置密码
-    handleResetPassword(user) {
-      this.passwordForm.id = user.id;
+    handleResetPassword(account) {
+      this.passwordForm.account = account;
+      this.passwordForm.id = account.id;
       this.passwordDialogVisible = true;
     },
     // 设置状态
-    async handleSetStatus(user, status = '1') {
+    async handleSetStatus(account, status = '1') {
       try {
         const info = {
           status,
         };
-        const res = await updateUser(user.id, info);
+        const res = await updateAccount(account.id, info);
         console.log(res);
         if (!res.success) {
           this.$message.error(res.message || '修改失败，请重试');
         } else {
           this.$message.success('修改成功');
           // 更新用户的当前状态
-          user.status = status;
+          account.status = status;
         }
       } catch (error) {
         console.log('handleSetStatus error =>>', error);
@@ -559,13 +570,13 @@ export default {
       console.log(`每页 ${val} 条`);
       this.page = 1;
       this.size = val;
-      this.getUsers();
+      this.getAccounts();
     },
     // 设置 pagination page
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.page = val;
-      this.getUsers();
+      this.getAccounts();
     },
     // 重置查询
     resetQueryForm(formName) {
@@ -573,16 +584,34 @@ export default {
         return;
       }
       this.$refs[formName].resetFields();
-      this.getUsers();
+      this.getAccounts();
     },
-    // 重置弹窗表单
-    resetDialogForm(formName) {
+    // 初始化 添加/编辑弹窗表单数据
+    resetAccountDialogForm(formName) {
+      this.accountForm = {
+        id: '',
+        username: '',
+        password: '',
+        nickname: '',
+        status: '1',
+        role: '',
+        roleName: '',
+      };
+      this.$refs[formName].resetFields();
+    },
+    // 初始化 重置密码弹窗表单数据
+    resetPasswordDialogForm(formName) {
+      this.passwordForm = {
+        id: '',
+        password: '',
+        account: {},
+      };
       this.$refs[formName].resetFields();
     },
     // 查询
     submitQueryForm() {
       this.page = 1;
-      this.getUsers();
+      this.getAccounts();
     },
     // 重置密码
     submitPasswordForm(formName) {
@@ -594,13 +623,15 @@ export default {
             const info = {
               password,
             };
-            const res = await updateUser(id, info);
+            const res = await updateAccount(id, info);
             this.passwordSubmitting = false;
             if (!res.success) {
               this.$message.error(res.message || '重置密码失败，请重试');
             } else {
               this.$message.success('重置密码成功');
               this.passwordDialogVisible = false;
+              // 更新账号的密码
+              this.passwordForm.account.password = password;
             }
           } catch (error) {
             this.passwordSubmitting = false;
@@ -616,15 +647,15 @@ export default {
           try {
             this.submitting = true;
             // 获取权限角色名称
-            const role = this.roles.find(item => item.id === this.userForm.role);
-            this.userForm.roleName = role.name;
-            const data = { ...this.userForm };
+            const role = this.roles.find(item => item.id === this.accountForm.role);
+            this.accountForm.roleName = role.name;
+            const data = { ...this.accountForm };
             // 如果是添加菜单, 删除对象 id
             if (this.actionType !== 'edit') {
               delete data.id;
             }
 
-            const res = await createAndEditUser(data);
+            const res = await createAndEditAccount(data);
             this.submitting = false;
             if (!res.success) {
               const errorMsg = this.actionType !== 'edit' ? '添加失败，请重试' : '编辑失败，请重试';
@@ -635,7 +666,7 @@ export default {
               // 隐藏弹窗
               this.dialogVisible = false;
               // 重新加载列表数据
-              this.getUsers();
+              this.getAccounts();
             }
           } catch (error) {
             this.submitting = false;
@@ -659,7 +690,7 @@ export default {
 </script>
 
 <style lang="scss">
-.admin-users {
+.admin-accounts {
   .list-query-form {
     .input-with-select .el-select .el-input {
       width: 100px;

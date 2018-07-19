@@ -29,6 +29,22 @@
       "roleName": "游客",
       "created_at": "2018-07-19T08:08:17.935Z",
       "status": "0"
+    },
+    {
+      "id": "69f22790-8b67-11e8-a6be-5b122887b567",
+      "token": "69f22791-8b67-11e8-a6be-5b122887b567",
+      "username": "adasd",
+      "password": "asdasd",
+      "nickname": "asdasd",
+      "status": "1",
+      "mobile": "",
+      "avatar_url": "",
+      "roles": [
+        1
+      ],
+      "role": "bfe6bda0-8af9-11e8-9d84-1fb859fdce9d",
+      "roleName": "编辑人员",
+      "created_at": "2018-07-19T15:21:31.017Z"
     }
   ]
 }

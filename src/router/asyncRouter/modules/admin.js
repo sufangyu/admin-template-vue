@@ -15,11 +15,11 @@ export default {
   },
   children: [
     {
-      path: 'users',
-      name: 'adminUsers',
-      component: () => import('@/views/admin/users'),
+      path: 'accounts',
+      name: 'adminAccounts',
+      component: () => import('@/views/admin/accounts'),
       meta: {
-        title: '用户管理',
+        title: '帐号管理',
       },
     },
     {

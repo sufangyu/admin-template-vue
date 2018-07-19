@@ -58,7 +58,7 @@
           <el-dropdown class="account" trigger="hover" placement="top">
             <div class="account-content">
               <icon-svg class="avatar" name="user" />
-              <span class="name">{{account.name}}</span>
+              <span class="name">{{account.nickname || account.username || '-'}}</span>
             </div>
             <el-dropdown-menu slot="dropdown" placement="bottom-end">
               <el-dropdown-item>

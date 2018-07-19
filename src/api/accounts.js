@@ -9,7 +9,7 @@ import config from '@/config';
  * @param {*} data
  * @returns
  */
-export function loginByUsername(data) {
+export function loginByUsername(data = {}) {
   const url = `${config.API_BASE}/accounts/login`;
 
   return http.post(url, data);
@@ -23,7 +23,7 @@ export function loginByUsername(data) {
  * @returns
  */
 export function getAccount() {
-  const url = `${config.API_BASE}/accounts`;
+  const url = `${config.API_BASE}/account`;
 
   return http.get(url);
 }
@@ -36,8 +36,8 @@ export function getAccount() {
  * @param {*} data
  * @returns
  */
-export function createAccount(data) {
-  const url = `${config.API_BASE}/accounts/create`;
+export function createAccount(data = {}) {
+  const url = `${config.API_BASE}/accounts`;
 
   return http.post(url, data);
 }
