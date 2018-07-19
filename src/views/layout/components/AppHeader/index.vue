@@ -85,7 +85,7 @@
 import { mapGetters } from 'vuex';
 import IconSvg from '@/components/IconSvg';
 import Fullscreen from '@/components/Fullscreen';
-import langConfig from '@/lang/config';
+import config from '@/config';
 import Hamburger from './Hamburger';
 import Messages from './Messages';
 
@@ -100,7 +100,7 @@ export default {
   data() {
     return {
       unreadCount: 10,
-      languages: langConfig,
+      languages: config.LANGUAGES,
     };
   },
   computed: {

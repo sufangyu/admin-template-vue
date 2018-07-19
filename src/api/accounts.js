@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from './config';
+import config from '@/config';
 
 
 /**
@@ -10,7 +10,7 @@ import BASE_API from './config';
  * @returns
  */
 export function loginByUsername(data) {
-  const url = `${BASE_API}/accounts/login`;
+  const url = `${config.API_BASE}/accounts/login`;
 
   return http.post(url, data);
 }
@@ -23,7 +23,7 @@ export function loginByUsername(data) {
  * @returns
  */
 export function getAccount() {
-  const url = `${BASE_API}/accounts`;
+  const url = `${config.API_BASE}/accounts`;
 
   return http.get(url);
 }
@@ -37,7 +37,7 @@ export function getAccount() {
  * @returns
  */
 export function createAccount(data) {
-  const url = `${BASE_API}/accounts/create`;
+  const url = `${config.API_BASE}/accounts/create`;
 
   return http.post(url, data);
 }

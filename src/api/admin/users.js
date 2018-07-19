@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from '../config';
+import config from '@/config';
 
 
 /**
@@ -9,7 +9,7 @@ import BASE_API from '../config';
  * @returns
  */
 export function getUsers(query = {}) {
-  const url = `${BASE_API}/admin/users`;
+  const url = `${config.API_BASE}/admin/users`;
 
   return http.get(url, query);
 }
@@ -25,11 +25,11 @@ export function getUsers(query = {}) {
 export function createAndEditUser(data) {
   let url = '';
   if (data.id && data.id !== '') {
-    url = `${BASE_API}/admin/users/${data.id}`;
+    url = `${config.API_BASE}/admin/users/${data.id}`;
     return http.put(url, data);
   }
 
-  url = `${BASE_API}/admin/users`;
+  url = `${config.API_BASE}/admin/users`;
   return http.post(url, data);
 }
 
@@ -45,7 +45,7 @@ export function delUsers(users) {
   const data = {
     users,
   };
-  const url = `${BASE_API}/admin/users`;
+  const url = `${config.API_BASE}/admin/users`;
 
   return http.delete(url, {}, data);
 }
@@ -61,7 +61,7 @@ export function updateUser(id, info) {
   const data = {
     info,
   };
-  const url = `${BASE_API}/admin/users/${id}`;
+  const url = `${config.API_BASE}/admin/users/${id}`;
 
   return http.patch(url, data);
 }

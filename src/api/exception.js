@@ -1,9 +1,9 @@
 import http from '@/utils/request';
-import BASE_API from './config';
+import config from '@/config';
 
 
 /**
- * 获取 短信验证码
+ * 异常请求
  *
  * @export
  * @param {*} data
@@ -13,7 +13,7 @@ export default function getException(status) {
   const query = {
     status,
   };
-  const url = `${BASE_API}/exception`;
+  const url = `${config.API_BASE}/exception`;
 
   return http.get(url, query);
 }

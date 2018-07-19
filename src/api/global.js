@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from './config';
+import config from '@/config';
 
 
 /**
@@ -10,7 +10,7 @@ import BASE_API from './config';
  * @returns
  */
 export function getSMSCode(data) {
-  const url = `${BASE_API}/global/sms`;
+  const url = `${config.API_BASE}/global/sms`;
 
   return http.post(url, data);
 }
@@ -23,7 +23,7 @@ export function getSMSCode(data) {
  * @returns
  */
 export function getUnreadMesages() {
-  const url = `${BASE_API}/messages/unread`;
+  const url = `${config.API_BASE}/messages/unread`;
 
   return http.get(url);
 }

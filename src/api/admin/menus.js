@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from '../config';
+import config from '@/config';
 
 
 /**
@@ -9,7 +9,7 @@ import BASE_API from '../config';
  * @returns
  */
 export function getMenus() {
-  const url = `${BASE_API}/admin/menus`;
+  const url = `${config.API_BASE}/admin/menus`;
 
   return http.get(url);
 }
@@ -25,11 +25,11 @@ export function getMenus() {
 export function createAndEditMenu(data) {
   let url = '';
   if (data.id && data.id !== '') {
-    url = `${BASE_API}/admin/menus/${data.id}`;
+    url = `${config.API_BASE}/admin/menus/${data.id}`;
     return http.put(url, data);
   }
 
-  url = `${BASE_API}/admin/menus`;
+  url = `${config.API_BASE}/admin/menus`;
   return http.post(url, data);
 }
 
@@ -42,7 +42,7 @@ export function createAndEditMenu(data) {
  * @returns
  */
 export function delMenu(id) {
-  const url = `${BASE_API}/admin/menus/${id}`;
+  const url = `${config.API_BASE}/admin/menus/${id}`;
 
   return http.delete(url);
 }

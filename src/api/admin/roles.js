@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from '../config';
+import config from '@/config';
 
 
 /**
@@ -9,7 +9,7 @@ import BASE_API from '../config';
  * @returns
  */
 export function getRoles() {
-  const url = `${BASE_API}/admin/roles`;
+  const url = `${config.API_BASE}/admin/roles`;
 
   return http.get(url);
 }
@@ -26,7 +26,7 @@ export function getRole(id = '') {
     console.warn('There has\'t role id');
     return false;
   }
-  const url = `${BASE_API}/admin/roles/${id}`;
+  const url = `${config.API_BASE}/admin/roles/${id}`;
 
   return http.get(url);
 }
@@ -40,7 +40,7 @@ export function getRole(id = '') {
  * @returns
  */
 export function createRole(data) {
-  const url = `${BASE_API}/admin/roles`;
+  const url = `${config.API_BASE}/admin/roles`;
   return http.post(url, data);
 }
 
@@ -53,7 +53,7 @@ export function createRole(data) {
  * @returns
  */
 export function editRole(data) {
-  const url = `${BASE_API}/admin/roles/${data.id}`;
+  const url = `${config.API_BASE}/admin/roles/${data.id}`;
   return http.put(url, data);
 }
 
@@ -66,7 +66,7 @@ export function editRole(data) {
  * @returns
  */
 export function delRole(id) {
-  const url = `${BASE_API}/admin/roles/${id}`;
+  const url = `${config.API_BASE}/admin/roles/${id}`;
 
   return http.delete(url);
 }
@@ -83,7 +83,7 @@ export function delRoles(roles) {
   const data = {
     roles,
   };
-  const url = `${BASE_API}/admin/roles`;
+  const url = `${config.API_BASE}/admin/roles`;
 
   return http.delete(url, {}, data);
 }

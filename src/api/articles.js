@@ -1,5 +1,5 @@
 import http from '@/utils/request';
-import BASE_API from './config';
+import config from '@/config';
 
 
 /**
@@ -10,7 +10,7 @@ import BASE_API from './config';
  * @returns
  */
 export function getArticleList(query) {
-  const url = `${BASE_API}/articles`;
+  const url = `${config.API_BASE}/articles`;
 
   return http.get(url, query);
 }
@@ -25,7 +25,7 @@ export function getArticleList(query) {
  * @returns
  */
 export function getAccount(id) {
-  const url = `${BASE_API}/articles/${id}`;
+  const url = `${config.API_BASE}/articles/${id}`;
 
   return http.get(url);
 }
@@ -39,7 +39,7 @@ export function getAccount(id) {
  * @returns
  */
 export function createArticle(data) {
-  const url = `${BASE_API}/articles/create`;
+  const url = `${config.API_BASE}/articles/create`;
 
   return http.post(url, data);
 }
@@ -53,7 +53,7 @@ export function createArticle(data) {
  * @returns
  */
 export function updateArticle(data) {
-  const url = `${BASE_API}/articles/update`;
+  const url = `${config.API_BASE}/articles/update`;
 
   return http.post(url, data);
 }
@@ -67,7 +67,7 @@ export function updateArticle(data) {
  * @returns
  */
 export function fetchPv(pv) {
-  const url = `${BASE_API}/articles/pv`;
+  const url = `${config.API_BASE}/articles/pv`;
 
   return http.get(url, pv);
 }
