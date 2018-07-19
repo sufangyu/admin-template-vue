@@ -6,10 +6,11 @@
  * redirect: noredirect           redirect:noredirect 时,在面包屑中不会重定向
  * name: 'router-name'            在 <keep-alive> 使用 (必须设置!!!)
  * meta : {
-     roles: ['admin','editor']    控制页面可访问的角色. 为空表示所有用户都可以访问
-     title: 'title'               页面标题. 在子菜单 和 面包屑中显示 (推荐设置)
-     icon: 'svg-name'             sidebar 显示的图标名称
-     noCache: true                是否缓存页面. 默认是false
+    requireAuth: true,           需要登录验证
+    roles: ['admin','editor']    控制页面可访问的角色. 为空表示所有用户都可以访问
+    title: 'title'               页面标题. 在子菜单 和 面包屑中显示 (推荐设置)
+    icon: 'svg-name'             sidebar 显示的图标名称
+    noCache: true                是否缓存页面. 默认是false
    }
  */
 ```

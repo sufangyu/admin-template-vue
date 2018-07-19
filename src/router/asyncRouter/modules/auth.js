@@ -26,6 +26,7 @@ export default {
       component: () => import('@/views/auth/admin'),
       meta: {
         title: '管理员可见',
+        requireAuth: true,
         roles: ['admin'],
       },
     },
@@ -35,6 +36,7 @@ export default {
       component: () => import('@/views/auth/editor'),
       meta: {
         title: '运营编辑',
+        requireAuth: true,
         roles: ['editor'],
       },
     },
@@ -44,6 +46,7 @@ export default {
       component: () => import('@/views/auth/dev'),
       meta: {
         title: '开发者',
+        requireAuth: true,
         roles: ['dev'],
       },
     },

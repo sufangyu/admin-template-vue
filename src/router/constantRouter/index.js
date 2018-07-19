@@ -13,6 +13,7 @@ export default [
         icon: 'home',
         title: '控制台',
         noCache: true,
+        requireAuth: true,
         roles: ['admin', 'editor'],
       },
     }],

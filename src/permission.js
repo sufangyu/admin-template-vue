@@ -66,7 +66,7 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done();
     } else {
       // match router
-      if (to.meta.roles && to.meta.roles.length > 0) {
+      if (to.meta.requireAuth) {
         const redirectUrl = encodeURIComponent(to.path);
         next({ path: `/login?redirect=${redirectUrl}`, replace: true });
         NProgress.done();

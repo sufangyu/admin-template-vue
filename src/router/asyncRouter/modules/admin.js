@@ -10,6 +10,8 @@ export default {
   meta: {
     title: '系统管理',
     icon: 'admin',
+    requireAuth: true,
+    roles: ['admin'],
   },
   children: [
     {
