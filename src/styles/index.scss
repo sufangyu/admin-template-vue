@@ -212,6 +212,11 @@ html {
     }
   }
 }
+.action-inline {
+  + .action-inline {
+    margin-left: 10px;
+  }
+}
 
 
 

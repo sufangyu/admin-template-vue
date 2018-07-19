@@ -203,9 +203,7 @@ server.post('/api/admin/menus', (req, res) => {
       message: '菜单唯一标识已存在',
     });
   } else {
-    console.log('extraRules =>>', extraRules);
-    console.log('req.body.extraRules =>>', req.body.extraRules);
-    const newMenus = {
+    const newMenu = {
       id: UUID.v1(),
       name,
       parentId,
@@ -215,7 +213,7 @@ server.post('/api/admin/menus', (req, res) => {
     };
 
     DB.get('menus')
-      .push(newMenus)
+      .push(newMenu)
       .write();
 
     res.send({
@@ -249,7 +247,7 @@ server.put('/api/admin/menus/:id', (req, res) => {
       message: '菜单唯一标识已存在',
     });
   } else {
-    const newMenus = {
+    const newMenu = {
       id,
       name,
       parentId,
@@ -258,12 +256,12 @@ server.put('/api/admin/menus/:id', (req, res) => {
     };
     DB.get('menus')
       .find({ id })
-      .assign(newMenus)
+      .assign(newMenu)
       .write();
 
     res.send({
       success: true,
-      message: '添加成功',
+      message: '修改成功',
     });
   }
 });
@@ -290,6 +288,129 @@ server.delete('/api/admin/menus/:id', (req, res) => {
       message: '删除成功',
     });
   }
+});
+
+
+// 角色 - 获取列表
+server.get('/api/admin/roles', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+  const roles = DB.get('roles').value();
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: roles,
+  });
+});
+// 角色 - 信息
+server.get('/api/admin/roles/:id', (req, res) => {
+  const { id } = req.params;
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+  const role = DB.get('roles')
+    .find({ id })
+    .value();
+
+  if (!role) {
+    res.send({
+      success: false,
+      message: '不存在角色',
+    });
+  } else {
+    res.send({
+      success: true,
+      message: '成功',
+      data: role,
+    });
+  }
+});
+// 角色 - 添加
+server.post('/api/admin/roles', (req, res) => {
+  const { name, status, menus = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+  const role = DB.get('roles')
+    .find({ name })
+    .value();
+
+  if (role) {
+    res.send({
+      success: false,
+      message: '已存在同名角色',
+    });
+  } else {
+    const newRole = {
+      id: UUID.v1(),
+      name,
+      status,
+      menus,
+      created_at: new Date(),
+    };
+
+    DB.get('roles')
+      .push(newRole)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 角色 - 编辑
+server.put('/api/admin/roles/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, status, menus = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+  const role = DB.get('roles')
+    .find({ id })
+    .value();
+
+  if (!role) {
+    res.send({
+      success: false,
+      message: '不存在角色',
+    });
+  } else {
+    const newRole = {
+      id,
+      name,
+      status,
+      menus,
+    };
+    DB.get('roles')
+      .find({ id })
+      .assign(newRole)
+      .write();
+
+    res.send({
+      success: true,
+      message: '修改成功',
+    });
+  }
+});
+// 角色 - 删除
+server.delete('/api/admin/roles', (req, res) => {
+  const { roles } = req.body;
+  console.log(roles);
+
+  if (roles.length === 0) {
+    res.send({
+      success: false,
+      message: '角色ID不能为空',
+    });
+    return;
+  }
+
+  roles.forEach((role) => {
+    const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+    DB.get('roles')
+      .remove({ id: role })
+      .write();
+  });
+
+  res.send({
+    success: true,
+    message: '删除成功',
+  });
 });
 
 

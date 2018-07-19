@@ -16,7 +16,7 @@ export function getMenus() {
 
 
 /**
- * 添加 菜单
+ * 添加、编辑 菜单
  *
  * @export
  * @param {*} data

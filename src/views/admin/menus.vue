@@ -162,7 +162,7 @@
 <script>
 import TreeTable from '@/components/TreeTable';
 import { treeify } from '@/utils/tree';
-import { getMenus, createAndEditMenu, delMenu } from '@/api/admin/menu';
+import { getMenus, createAndEditMenu, delMenu } from '@/api/admin/menus';
 
 // 顶级菜单选项
 const topParent = {
@@ -324,9 +324,15 @@ export default {
     },
     // 编辑菜单
     handleEditMenu(menu) {
-      const { id, name, unique, parentId, extraRulesShow } = menu;
+      const { id, name, unique, parentId } = menu;
+      let { extraRulesShow } = menu;
       this.menuActionType = 'edit';
       this.menuDialogVisible = true;
+
+      // 如果额外规则为空, 则默认赋值一个空规则
+      if (extraRulesShow.length === 0) {
+        extraRulesShow = [...defaultExtraRules];
+      }
 
       // 重置 额外规则设置. 解决显示之前编辑未提交的数据
       const extraRules = extraRulesShow.map(rule => ({ ...rule }));

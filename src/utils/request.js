@@ -179,11 +179,12 @@ const http = {
    * @param {*} options axios 配置
    * @return {*}
    */
-  delete: (url = '', query = {}, options = {}) => {
+  delete: (url = '', query = {}, data = {}, options = {}) => {
     const config = Object.assign({}, {
       method: 'DELETE',
       url,
-      query,
+      params: query,
+      data,
       cancelToken: new CancelToken((c) => {
         cancel = c;
       }),
