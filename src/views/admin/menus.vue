@@ -81,12 +81,12 @@
       </tree-table>
     </el-card>
 
-    <!-- 添加菜单弹窗 -->
+    <!-- 添加、编辑菜单弹窗 -->
     <el-dialog
       :title="menuActionTypeName"
       :visible.sync="menuDialogVisible"
-      width="85%"
       center
+      width="85%"
       class="dialog-full"
     >
       <el-form

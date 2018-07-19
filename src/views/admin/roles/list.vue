@@ -41,10 +41,12 @@
             >
               <template slot-scope="scope">
                 <status
+                  v-if="scope.row.status"
                   type="dot"
                   :status="scope.row.status | formatStatus"
                   :text="scope.row.status | formatStatusText"
                 ></status>
+                <span v-else>-</span>
               </template>
             </el-table-column>
 
@@ -154,7 +156,7 @@ export default {
       }
     },
     // 处理删除角色
-    async dealRolesDel(roles) {
+    async dealDelRoles(roles) {
       if (roles.length === 0) {
         return;
       }
@@ -196,12 +198,12 @@ export default {
     // 删除角色
     handleDel(role) {
       const roles = [role.id];
-      this.dealRolesDel(roles);
+      this.dealDelRoles(roles);
     },
     // 批量删除角色
     handleMultiDel() {
       const roles = this.multipleSelection.map(role => role.id);
-      this.dealRolesDel(roles);
+      this.dealDelRoles(roles);
     },
     // 表格勾选多选
     handleSelectionChange(val) {

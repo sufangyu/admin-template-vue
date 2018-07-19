@@ -210,6 +210,25 @@ const http = {
     }, options);
     return request(config);
   },
+  /**
+   * PATCH 请求
+   *
+   * @param {*} url 地址
+   * @param {*} data 提交数据
+   * @param {*} options axios 配置
+   * @return {*}
+   */
+  patch: (url = '', data = {}, options = {}) => {
+    const config = Object.assign({}, {
+      method: 'PATCH',
+      url,
+      data,
+      cancelToken: new CancelToken((c) => {
+        cancel = c;
+      }),
+    }, options);
+    return request(config);
+  },
 };
 
 export default http;

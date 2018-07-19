@@ -414,6 +414,150 @@ server.delete('/api/admin/roles', (req, res) => {
 });
 
 
+// 用户 - 获取列表
+server.get('/api/admin/users', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'users.json')));
+  let users = DB.get('users').value();
+  // 初始化创建
+  if (!users) {
+    DB.defaults({ users: [] })
+      .write();
+
+    users = [];
+  }
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: {
+      list: users,
+    },
+  });
+});
+// 用户 - 添加
+server.post('/api/admin/users', (req, res) => {
+  const { username, password, nickname, role, status, roleName } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'users.json')));
+  const user = DB.get('users')
+    .find({ username })
+    .value();
+
+  if (user) {
+    res.send({
+      success: false,
+      message: '用户名已存在',
+    });
+  } else {
+    const newUser = {
+      id: UUID.v1(),
+      username,
+      password,
+      nickname,
+      status,
+      role,
+      roleName,
+      created_at: new Date(),
+    };
+
+    DB.get('users')
+      .push(newUser)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 用户 - 编辑
+server.put('/api/admin/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { username, password, nickname, role, status, roleName } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'users.json')));
+  const menu = DB.get('users')
+    .find({ id })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '用户不存在',
+    });
+  } else {
+    const newUser = {
+      id,
+      username,
+      password,
+      nickname,
+      role,
+      status,
+      roleName,
+    };
+    DB.get('users')
+      .find({ id })
+      .assign(newUser)
+      .write();
+
+    res.send({
+      success: true,
+      message: '修改成功',
+    });
+  }
+});
+// 用户 - 删除
+server.delete('/api/admin/users', (req, res) => {
+  const { users } = req.body;
+  console.log(users);
+
+  if (users.length === 0) {
+    res.send({
+      success: false,
+      message: '用户ID不能为空',
+    });
+    return;
+  }
+
+  users.forEach((user) => {
+    const DB = low(new FileSync(path.resolve(mockDir, 'users.json')));
+    DB.get('users')
+      .remove({ id: user })
+      .write();
+  });
+
+  res.send({
+    success: true,
+    message: '删除成功',
+  });
+});
+// 用户 - 更新信息
+server.patch('/api/admin/users/:id', (req, res) => {
+  const { id } = req.params;
+  const { info } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'users.json')));
+  const menu = DB.get('users')
+    .find({ id })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '用户不存在',
+    });
+  } else {
+    const newUser = info;
+    DB.get('users')
+      .find({ id })
+      .assign(newUser)
+      .write();
+
+    res.send({
+      success: true,
+      message: '修改成功',
+    });
+  }
+});
+
+
 server.use(router);
 
 server.listen(9090, () => {
