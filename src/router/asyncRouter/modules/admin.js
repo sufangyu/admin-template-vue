@@ -20,41 +20,51 @@ export default {
       component: () => import('@/views/admin/accounts'),
       meta: {
         title: '帐号管理',
+        requireAuth: true,
+        roles: ['admin'],
       },
     },
     {
       path: '/admin/roles',
-      name: 'adminRules',
+      name: 'adminRoles',
       component: LayoutEmpty,
       redirect: '/admin/roles/list',
       meta: {
         title: '权限角色',
+        requireAuth: true,
+        roles: ['admin'],
       },
       children: [
         {
           path: 'list',
-          name: 'adminRulesList',
+          name: 'adminRolesList',
           component: () => import('@/views/admin/roles/list'),
           meta: {
             title: '权限角色',
+            requireAuth: true,
+            roles: ['admin'],
           },
         },
         {
           path: 'create',
-          name: 'adminRulesCreate',
+          name: 'adminRolesCreate',
           component: () => import('@/views/admin/roles/create'),
           hidden: true,
           meta: {
             title: '添加',
+            requireAuth: true,
+            roles: ['admin'],
           },
         },
         {
           path: 'edit/:id',
-          name: 'adminRulesEdit',
+          name: 'adminRolesEdit',
           component: () => import('@/views/admin/roles/edit'),
           hidden: true,
           meta: {
             title: '编辑',
+            requireAuth: true,
+            roles: ['admin'],
           },
         },
       ],
@@ -65,6 +75,8 @@ export default {
       component: () => import('@/views/admin/menus'),
       meta: {
         title: '权限菜单',
+        requireAuth: true,
+        roles: ['admin'],
       },
     },
   ],

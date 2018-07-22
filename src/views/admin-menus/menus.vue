@@ -32,18 +32,18 @@
         ></el-table-column>
 
         <el-table-column
-          prop="extraRulesShow"
-          label="额外规则"
+          prop="roles"
+          label="可访问角色"
           align="center"
           min-width="300"
         >
           <template slot-scope="scope">
             <div
-              class="rule-list"
-              v-if="scope.row.extraRulesShow && scope.row.extraRulesShow.length > 0"
+              class="roles-list"
+              v-if="scope.row.roles && scope.row.roles.length > 0"
             >
-              <el-tag size="small" v-for="rule in scope.row.extraRulesShow" :key="rule.value">
-                {{rule.name || rule.value || '-'}}
+              <el-tag size="small" v-for="role in scope.row.roles" :key="role">
+                {{role || '-'}}
               </el-tag>
             </div>
             <span v-else>-</span>
@@ -124,26 +124,23 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item
-          v-for="(rule, index) in menuForm.extraRules"
-          :label="`额外规则 ${index + 1}`"
-          :key="rule.key"
-          :prop="`extraRules.${index}.value`"
-        >
-          <div class="form-extra-rule">
-            <el-input v-model.lazy="rule.name" placeholder="规则名称"></el-input>
-            <span class="spe-line">:</span>
-            <el-input v-model.lazy="rule.value" placeholder="规则值"></el-input>
-            <el-button
-              v-if="index === 0"
-              type="primary"
-              @click.prevent="handleCreateRule()"
-            >新增</el-button>
-            <el-button
-              v-else
-              @click.prevent="handleDelRule(rule)"
-            >删除</el-button>
-          </div>
+        <el-form-item label="可访问角色" prop="roles">
+          <el-select
+            v-model="menuForm.roles"
+            placeholder="选择访问角色"
+            clearable
+            multiple
+            style="width: 100%;"
+          >
+            <el-option
+              v-for="role in roles"
+              :key="role.id"
+              :value="role.value"
+              :label="role.name"
+            >
+              <span>{{role.name}}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item>
@@ -162,17 +159,14 @@
 <script>
 import TreeTable from '@/components/TreeTable';
 import { treeify } from '@/utils/tree';
-import { getMenus, createAndEditMenu, delMenu } from '@/api/admin/menus';
+import { getRoles } from '@/api/admin-menus/roles';
+import { getMenus, createAndEditMenu, delMenu } from '@/api/admin-menus/menus';
 
 // 顶级菜单选项
 const topParent = {
   id: '0',
   name: '作为顶级菜单',
 };
-// 默认额外规则
-const defaultExtraRules = [
-  { name: '', value: '' },
-];
 
 export default {
   components: {
@@ -180,6 +174,7 @@ export default {
   },
   data() {
     return {
+      roles: [],
       loading: false,
       menusTmp: [],
       menus: [],
@@ -190,7 +185,7 @@ export default {
         name: '',
         unique: '',
         parentId: '0',
-        extraRules: defaultExtraRules,
+        roles: [],
       },
       menuParentOptions: [topParent],
       menuSubmitting: false,
@@ -213,7 +208,7 @@ export default {
     },
   },
   created() {
-    this.getMenus();
+    Promise.all([this.getMenus(), this.getRoles()]);
   },
   methods: {
     // 获取菜单列表
@@ -225,21 +220,25 @@ export default {
         if (!res.success) {
           this.$message.error(res.message || '数据加载失败，请重试');
         } else {
-          res.data.map((item) => {
-            // 数组单项对象深拷贝, 解决编辑额外规则同步到列表中显示;
-            if (item.extraRules) {
-              item.extraRulesShow = item.extraRules.map(rule => ({ ...rule }));
-            } else {
-              item.extraRulesShow = [];
-            }
-            return item;
-          });
           this.menusTmp = res.data;
           this.menus = treeify(res.data);
         }
       } catch (error) {
         this.loading = false;
         console.log('getMenus error', error);
+      }
+    },
+    // 获取角色列表
+    async getRoles() {
+      try {
+        const res = await getRoles();
+        if (!res.success) {
+          this.$message.error(res.message || '数据加载失败，请重试');
+        } else {
+          this.roles = res.data;
+        }
+      } catch (error) {
+        console.log('getRoles error =>>', error);
       }
     },
     // 添加菜单
@@ -252,7 +251,7 @@ export default {
         name: '',
         unique: '',
         parentId: '0',
-        extraRules: [...defaultExtraRules],
+        roles: [],
       };
 
       if (type === 'createTop') {
@@ -265,20 +264,6 @@ export default {
           name: menu.name,
         }];
         this.menuForm.parentId = menu.id;
-      }
-    },
-    // 添加规则
-    handleCreateRule() {
-      this.menuForm.extraRules.push({
-        name: '',
-        value: '',
-      });
-    },
-    // 删除规则
-    handleDelRule(rule) {
-      const index = this.menuForm.extraRules.indexOf(rule);
-      if (index !== -1) {
-        this.menuForm.extraRules.splice(index, 1);
       }
     },
     // 删除菜单
@@ -323,25 +308,16 @@ export default {
     },
     // 编辑菜单
     handleEditMenu(menu) {
-      const { id, name, unique, parentId } = menu;
-      let { extraRulesShow } = menu;
+      const { id, name, unique, parentId, roles } = menu;
       this.menuActionType = 'edit';
       this.menuDialogVisible = true;
-
-      // 如果额外规则为空, 则默认赋值一个空规则
-      if (extraRulesShow.length === 0) {
-        extraRulesShow = [...defaultExtraRules];
-      }
-
-      // 重置 额外规则设置. 解决显示之前编辑未提交的数据
-      const extraRules = extraRulesShow.map(rule => ({ ...rule }));
 
       this.menuForm = {
         id,
         name,
         unique,
         parentId,
-        extraRules,
+        roles,
       };
 
       const parents = this.menusTmp.filter(item => item.id === parentId);
@@ -366,11 +342,6 @@ export default {
               delete data.id;
             }
 
-            // 处理额外规则. 过滤空项额外规则
-            if (data.extraRules.length > 0) {
-              data.extraRules = data.extraRules.filter(rule => rule.name !== '' && rule.value !== '');
-            }
-
             const res = await createAndEditMenu(data);
             this.menuSubmitting = false;
             if (!res.success) {
@@ -383,8 +354,6 @@ export default {
               this.menuDialogVisible = false;
               // 重新加载列表数据
               this.getMenus();
-              // 重置额外规则
-              this.$set(this.menuForm, 'extraRules', defaultExtraRules);
             }
           } catch (error) {
             this.menuSubmitting = false;
@@ -415,7 +384,7 @@ export default {
     }
   }
 
-  .rule-list {
+  .roles-list {
     text-align: left;
 
     .el-tag {

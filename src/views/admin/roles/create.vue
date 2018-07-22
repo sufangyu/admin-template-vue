@@ -17,7 +17,7 @@
         class="form"
       >
         <el-form-item label="名称" prop="name">
-          <el-input v-model.number="roleForm.name"></el-input>
+          <el-input v-model="roleForm.name"></el-input>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">

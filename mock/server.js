@@ -39,15 +39,32 @@ server.get('/api/account', (req, res) => {
     });
   } else {
     const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
+    const DBRoles = low(new FileSync(path.resolve(mockDir, 'roles.json')));
     const account = DB.get('accounts')
       .find({ token: accesstoken })
       .value();
+    const role = DBRoles.get('roles')
+      .find({ id: account.role })
+      .value();
+
+    let menus = [];
+    if (role) {
+      role.menus.forEach((menu) => {
+        menu.extraRules = [...menu.extraRulesChecked];
+        // delete menu.extraRulesChecked;
+        delete menu.extraRulesCheckedValues;
+      });
+      menus = role.menus;
+    }
 
     delete account.password;
     res.send({
       success: true,
       message: 'success',
-      data: account,
+      data: {
+        account,
+        menus,
+      },
     });
   }
 });
@@ -79,7 +96,9 @@ server.post('/api/accounts', (req, res) => {
     nickname,
     mobile = '',
     avatarUrl = '',
-    roles = [1],
+    roles = [],
+    rolesShow = [],
+    isSuperAdmin = false,
     status = '0',
     role = '',
     roleName = '',
@@ -95,6 +114,11 @@ server.post('/api/accounts', (req, res) => {
       message: '用户名已存在',
     });
   } else {
+    if (isSuperAdmin) {
+      if (!roles.includes('admin')) {
+        roles.push('admin');
+      }
+    }
     const newAccount = {
       id: UUID.v1(),
       token: UUID.v1(),
@@ -104,7 +128,8 @@ server.post('/api/accounts', (req, res) => {
       status,
       mobile,
       avatar_url: avatarUrl,
-      roles, // 角色. 0: 管理员; 1: 编辑人员
+      roles,
+      rolesShow,
       role,
       roleName,
       created_at: new Date(),
@@ -129,9 +154,11 @@ server.put('/api/accounts/:id', (req, res) => {
     nickname,
     mobile = '',
     avatarUrl = '',
-    roles = [1],
-    role,
+    isSuperAdmin = false,
     status,
+    roles = [],
+    rolesShow = [],
+    role,
     roleName,
   } = req.body;
   const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
@@ -145,14 +172,27 @@ server.put('/api/accounts/:id', (req, res) => {
       message: '用户不存在',
     });
   } else {
+    if (isSuperAdmin) {
+      const hasRole = roles.find(roleItem => roleItem === 'admin');
+      if (!hasRole) {
+        roles.push('admin');
+      }
+    } else {
+      const index = roles.indexOf('admin');
+      if (index > -1) {
+        roles.splice(index, 1);
+      }
+    }
     const newAccount = {
       username,
       password,
       nickname,
-      status,
       mobile,
       avatar_url: avatarUrl,
-      roles, // 角色. 0: 管理员; 1: 编辑人员
+      isSuperAdmin,
+      status,
+      roles,
+      rolesShow,
       role,
       roleName,
     };
@@ -179,17 +219,44 @@ server.delete('/api/accounts', (req, res) => {
     return;
   }
 
+  let hasAdmin = false;
+
   accounts.forEach((account) => {
     const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
+    // 防止删除超级管理员
+    const willDelAccount = DB.get('accounts')
+      .find({ id: account })
+      .value();
+    if (willDelAccount && willDelAccount.username === 'admin') {
+      hasAdmin = true;
+      return;
+    }
+
     DB.get('accounts')
       .remove({ id: account })
       .write();
   });
 
-  res.send({
-    success: true,
-    message: '删除成功',
-  });
+  console.log(accounts.length === 1, hasAdmin);
+  let response = {};
+  if (accounts.length === 1 && hasAdmin) {
+    response = {
+      success: false,
+      message: '超级管理员不能删除',
+    };
+  } else if (accounts.length > 1 && hasAdmin) {
+    response = {
+      success: true,
+      message: '删除成功，剩余超级管理员不能删除',
+    };
+  } else {
+    response = {
+      success: true,
+      message: '删除成功',
+    };
+  }
+
+  res.send(response);
 });
 // 用户 - 更新信息
 server.patch('/api/accounts/:id', (req, res) => {
@@ -222,10 +289,13 @@ server.patch('/api/accounts/:id', (req, res) => {
 
 // 登录
 server.post('/api/accounts/login', (req, res) => {
-  const body = req.body;
+  const { username, password } = req.body;
   const DB = low(new FileSync(path.resolve(mockDir, 'accounts.json')));
   const account = DB.get('accounts')
-    .find({ username: body.username, password: body.password })
+    .find({
+      username,
+      password,
+    })
     .value();
 
   if (!account) {
@@ -234,6 +304,13 @@ server.post('/api/accounts/login', (req, res) => {
       message: '账号或者密码不正确',
     });
   } else {
+    if (account.status !== '1') {
+      res.send({
+        success: false,
+        message: '帐号未启用，请联系管理员',
+      });
+      return;
+    }
     delete account.password;
     res.send({
       success: true,
@@ -405,7 +482,7 @@ server.put('/api/admin/menus/:id', (req, res) => {
     .value();
 
   const menuSameUnique = DB.get('menus')
-    .filter({ id: !id })
+    .filter(item => item.id !== id)
     .find({ unique })
     .value();
 
@@ -560,10 +637,9 @@ server.put('/api/admin/roles/:id', (req, res) => {
     });
   }
 });
-// 角色 - 删除
+// 角色 - 批量删除
 server.delete('/api/admin/roles', (req, res) => {
   const { roles } = req.body;
-  console.log(roles);
 
   if (roles.length === 0) {
     res.send({
@@ -575,6 +651,244 @@ server.delete('/api/admin/roles', (req, res) => {
 
   roles.forEach((role) => {
     const DB = low(new FileSync(path.resolve(mockDir, 'roles.json')));
+    DB.get('roles')
+      .remove({ id: role })
+      .write();
+  });
+
+  res.send({
+    success: true,
+    message: '删除成功',
+  });
+});
+
+
+// 权限菜单(菜单配置) - 获取列表
+server.get('/api/admin-menus/menus', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus2.json')));
+  let menus = DB.get('menus').value();
+  // 初始化创建
+  if (!menus) {
+    DB.defaults({ menus: [] })
+      .write();
+
+    menus = [];
+  }
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: menus,
+  });
+});
+// 权限菜单(菜单配置) - 添加
+server.post('/api/admin-menus/menus', (req, res) => {
+  const { name, parentId, unique, roles = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus2.json')));
+  const menu = DB.get('menus')
+    .find({ unique })
+    .value();
+
+  if (menu) {
+    res.send({
+      success: false,
+      message: '菜单唯一标识已存在',
+    });
+  } else {
+    const newMenu = {
+      id: UUID.v1(),
+      name,
+      parentId,
+      unique,
+      roles,
+      created_at: new Date(),
+    };
+
+    DB.get('menus')
+      .push(newMenu)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 权限菜单(菜单配置) - 编辑
+server.put('/api/admin-menus/menus/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, parentId, unique, roles = [] } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus2.json')));
+  const menu = DB.get('menus')
+    .find({ id })
+    .value();
+
+  const menuSameUnique = DB.get('menus')
+    .filter(item => item.id !== id)
+    .find({ unique })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '权限菜单不存在',
+    });
+  } else if (menuSameUnique) {
+    res.send({
+      success: false,
+      message: '菜单唯一标识已存在',
+    });
+  } else {
+    const newMenu = {
+      id,
+      name,
+      parentId,
+      unique,
+      roles,
+    };
+    DB.get('menus')
+      .find({ id })
+      .assign(newMenu)
+      .write();
+
+    res.send({
+      success: true,
+      message: '修改成功',
+    });
+  }
+});
+// 权限菜单(菜单配置) - 删除
+server.delete('/api/admin-menus/menus/:id', (req, res) => {
+  const { id } = req.params;
+  const DB = low(new FileSync(path.resolve(mockDir, 'menus2.json')));
+  const menu = DB.get('menus')
+    .find({ id })
+    .value();
+
+  if (!menu) {
+    res.send({
+      success: false,
+      message: '权限菜单不存在',
+    });
+  } else {
+    DB.get('menus')
+      .remove({ id })
+      .write();
+
+    res.send({
+      success: true,
+      message: '删除成功',
+    });
+  }
+});
+
+
+// 角色(菜单配置) - 列表
+server.get('/api/admin-menus/roles', (req, res) => {
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles2.json')));
+  let roles = DB.get('roles').value();
+  // 初始化创建
+  if (!roles) {
+    DB.defaults({ roles: [] })
+      .write();
+
+    roles = [];
+  }
+
+  res.send({
+    success: true,
+    message: 'success',
+    data: roles,
+  });
+});
+// 角色(菜单配置) - 添加
+server.post('/api/admin-menus/roles', (req, res) => {
+  const { name, value, status } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles2.json')));
+  const role = DB.get('roles')
+    .find({ value })
+    .value();
+
+  if (role) {
+    res.send({
+      success: false,
+      message: '已存在同标识角色',
+    });
+  } else {
+    const newRole = {
+      id: UUID.v1(),
+      name,
+      value,
+      status,
+      created_at: new Date(),
+    };
+
+    DB.get('roles')
+      .push(newRole)
+      .write();
+
+    res.send({
+      success: true,
+      message: '添加成功',
+    });
+  }
+});
+// 角色(菜单配置) - 编辑
+server.put('/api/admin-menus/roles/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, status, value } = req.body;
+  const DB = low(new FileSync(path.resolve(mockDir, 'roles2.json')));
+  const role = DB.get('roles')
+    .find({ id })
+    .value();
+
+  const sameValueRole = DB.get('roles')
+    .filter(item => item.id !== id)
+    .find({ value })
+    .value();
+
+  if (!role) {
+    res.send({
+      success: false,
+      message: '不存在角色',
+    });
+  } else if (sameValueRole) {
+    res.send({
+      success: false,
+      message: '已存在同标识角色',
+    });
+  } else {
+    const newRole = {
+      id,
+      name,
+      value,
+      status,
+    };
+    DB.get('roles')
+      .find({ id })
+      .assign(newRole)
+      .write();
+
+    res.send({
+      success: true,
+      message: '修改成功',
+    });
+  }
+});
+// 角色(菜单配置) - 批量删除
+server.delete('/api/admin-menus/roles', (req, res) => {
+  const { roles } = req.body;
+
+  if (roles.length === 0) {
+    res.send({
+      success: false,
+      message: '角色ID不能为空',
+    });
+    return;
+  }
+
+  roles.forEach((role) => {
+    const DB = low(new FileSync(path.resolve(mockDir, 'roles2.json')));
     DB.get('roles')
       .remove({ id: role })
       .write();

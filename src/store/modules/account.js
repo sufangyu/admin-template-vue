@@ -1,4 +1,5 @@
-import formatRoles from '@/utils/formatRoles';
+// import formatRoles from '@/utils/formatRoles';
+import router from '@/router';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import { loginByUsername, getAccount } from '@/api/accounts';
 
@@ -17,8 +18,9 @@ const user = {
     // 退出登录
     logOut({ commit }) {
       return new Promise((resolve) => {
-        commit('REESET_STATE');
         removeToken();
+        router.replace('/login');
+        commit('REESET_STATE');
         resolve();
       });
     },
@@ -28,13 +30,9 @@ const user = {
         const res = await getAccount();
         if (res.success) {
           // 验证返回的 roles 是否是一个非空数组
-          const { data } = res;
-          if (data.roles && data.roles.length > 0) {
-            commit('SET_ROLES', formatRoles(data.roles));
-          } else {
-            reject('roles must be a non-null array !');
-          }
-          commit('SET_ACCOUNT', data);
+          const { account } = res.data;
+          commit('SET_ROLES', (account.roles || []));
+          commit('SET_ACCOUNT', account);
           resolve(res.data);
         } else {
           reject(res);

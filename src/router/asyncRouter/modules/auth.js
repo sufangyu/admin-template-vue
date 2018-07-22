@@ -3,9 +3,10 @@ import Layout from '@/views/layout/';
 
 export default {
   path: '/auth',
-  name: '权限控制',
+  name: 'auth',
   component: Layout,
   redirect: '/auth/index',
+  alwaysShow: true,
   meta: {
     title: '权限控制',
     icon: 'auth',
@@ -18,6 +19,7 @@ export default {
       meta: {
         title: '所有用户可见',
         desc: '不同权限的用户, 显示不同的菜单入口',
+        requireAuth: true,
       },
     },
     {

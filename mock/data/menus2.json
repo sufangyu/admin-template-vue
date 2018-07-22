@@ -1,0 +1,109 @@
+{
+  "menus": [
+    {
+      "id": "dd2c8250-8c89-11e8-a822-43c614229a1b",
+      "name": "首页",
+      "parentId": "0",
+      "unique": "dashboard",
+      "roles": [
+        "admin",
+        "dev",
+        "edit"
+      ],
+      "created_at": "2018-07-21T02:00:38.389Z"
+    },
+    {
+      "id": "2e2e6c90-8c8a-11e8-a822-43c614229a1b",
+      "name": "系统管理",
+      "parentId": "0",
+      "unique": "admin",
+      "roles": [
+        "admin",
+        "edit"
+      ],
+      "created_at": "2018-07-21T02:02:54.297Z"
+    },
+    {
+      "id": "8fa99030-8c8a-11e8-963b-d7ca1734b0b5",
+      "name": "用户管理",
+      "parentId": "2e2e6c90-8c8a-11e8-a822-43c614229a1b",
+      "unique": "adminAccounts",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T02:05:37.843Z"
+    },
+    {
+      "id": "a4e1b130-8c8a-11e8-963b-d7ca1734b0b5",
+      "name": "添加",
+      "parentId": "8fa99030-8c8a-11e8-963b-d7ca1734b0b5",
+      "unique": "adminAccountsCreate",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T02:06:13.443Z"
+    },
+    {
+      "id": "b7ea6f10-8c8a-11e8-963b-d7ca1734b0b5",
+      "name": "编辑",
+      "parentId": "8fa99030-8c8a-11e8-963b-d7ca1734b0b5",
+      "unique": "adminAccountsEdit",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T02:06:45.377Z"
+    },
+    {
+      "id": "c555a520-8c8a-11e8-963b-d7ca1734b0b5",
+      "name": "删除",
+      "parentId": "8fa99030-8c8a-11e8-963b-d7ca1734b0b5",
+      "unique": "adminAccountsDel",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T02:07:07.890Z"
+    },
+    {
+      "id": "6d0b82c0-8caa-11e8-ad77-310f00c6ecdf",
+      "name": "权限角色",
+      "parentId": "2e2e6c90-8c8a-11e8-a822-43c614229a1b",
+      "unique": "adminRoles",
+      "roles": [
+        "admin",
+        "edit"
+      ],
+      "created_at": "2018-07-21T05:53:43.661Z"
+    },
+    {
+      "id": "7af8ba10-8caa-11e8-ad77-310f00c6ecdf",
+      "name": "列表",
+      "parentId": "6d0b82c0-8caa-11e8-ad77-310f00c6ecdf",
+      "unique": "adminRolesList",
+      "roles": [
+        "admin",
+        "edit"
+      ],
+      "created_at": "2018-07-21T05:54:07.025Z"
+    },
+    {
+      "id": "88a62940-8caa-11e8-ad77-310f00c6ecdf",
+      "name": "添加",
+      "parentId": "6d0b82c0-8caa-11e8-ad77-310f00c6ecdf",
+      "unique": "adminRolesCreate",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T05:54:29.972Z"
+    },
+    {
+      "id": "95723920-8caa-11e8-ad77-310f00c6ecdf",
+      "name": "编辑",
+      "parentId": "6d0b82c0-8caa-11e8-ad77-310f00c6ecdf",
+      "unique": "adminRolesEdit",
+      "roles": [
+        "admin"
+      ],
+      "created_at": "2018-07-21T05:54:51.442Z"
+    }
+  ]
+}

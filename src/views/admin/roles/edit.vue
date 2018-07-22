@@ -17,7 +17,7 @@
         class="form"
       >
         <el-form-item label="名称" prop="name">
-          <el-input v-model.number="roleForm.name"></el-input>
+          <el-input v-model="roleForm.name"></el-input>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
@@ -136,8 +136,13 @@ export default {
             // 勾选的额外规则
             if (this.roleForm.menus.length > 0) {
               const menu = this.roleForm.menus.find(menuItem => menuItem.id === item.id);
-              const extraRulesCheckedValues = menu.extraRulesChecked.map(rule => rule.value);
-              item.extraRulesCheckedValues = extraRulesCheckedValues;
+              if (menu && menu.extraRulesChecked) {
+                // menu.extraRulesChecked 做空值判断处理
+                const extraRulesCheckedValues = menu.extraRulesChecked.map(rule => (rule ? rule.value : ''));
+                item.extraRulesCheckedValues = extraRulesCheckedValues;
+              } else {
+                item.extraRulesCheckedValues = [];
+              }
             } else {
               item.extraRulesCheckedValues = [];
             }
@@ -161,7 +166,7 @@ export default {
           this.roleForm.name = name;
           this.roleForm.status = status;
           this.roleForm.menus = menus;
-          // 以勾选的权限菜单
+          // 已勾选的权限菜单
           this.menusDefaultCheckedKeys = menus.map(menu => menu.id);
         }
       } catch (error) {

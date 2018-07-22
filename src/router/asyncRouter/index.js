@@ -11,6 +11,7 @@ import auth from './modules/auth';
 import i18n from './modules/i18n';
 import exception from './modules/exception';
 import admin from './modules/admin';
+import adminMenus from './modules/adminMenus';
 import notFound from './modules/notFound';
 
 export default [
@@ -27,5 +28,6 @@ export default [
   i18n,
   exception,
   admin,
+  adminMenus,
   notFound,
 ];

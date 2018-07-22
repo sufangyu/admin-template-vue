@@ -1,5 +1,6 @@
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import config from '@/config';
 import router from '@/router';
 import store from '@/store';
 import { getToken } from '@/utils/auth';
@@ -13,7 +14,7 @@ NProgress.configure({ showSpinner: true });
  * @param {*} permissionRoles
  */
 function hasPermission(roles, permissionRoles) {
-  if (roles.indexOf('admin') >= 0) {
+  if (roles.includes('admin')) {
     return true;
   }
   if (!permissionRoles) {
@@ -33,11 +34,18 @@ router.beforeEach(async (to, from, next) => {
       next('/');
       NProgress.done();
     } else {
-      if (store.getters.roles.length === 0) {
+      if (JSON.stringify(store.getters.account) === '{}') {
+        if (config.PERMISSION_TYPE === 'roles' && config.IS_ASYNC_ROUTER_ROLES) {
+          // 异步匹配路由角色信息
+          await store.dispatch('asyncRouterRoles');
+        }
         // 未获取用户信息, 发请求获取, 然后根据权限生成路由
-        const account = await store.dispatch('getAccount');
+        const { account, menus = [] } = await store.dispatch('getAccount');
         if (account) {
-          await store.dispatch('generateRoutes', { roles: account.roles });
+          await store.dispatch('generateRoutes', {
+            roles: account.roles,
+            menus,
+          });
           // 根据权限动态添加可访问路由表
           router.addRoutes(store.getters.addRouters);
           next({ ...to, replace: true });

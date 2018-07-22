@@ -141,7 +141,17 @@
               min-width="120"
               align="center"
             >
-              <template slot-scope="scope">{{scope.row.roleName || '-'}}</template>
+              <template slot-scope="scope">
+                <div
+                  class="roles-list"
+                  v-if="scope.row.roles && scope.row.roles.length > 0"
+                >
+                  <el-tag size="small" v-for="role in scope.row.rolesShow" :key="role.value">
+                    {{role.name || role.value || '-'}}
+                  </el-tag>
+                </div>
+                <span v-else>-</span>
+              </template>
             </el-table-column>
 
             <el-table-column
@@ -253,14 +263,16 @@
 
         <el-form-item label="角色" prop="role">
           <el-select
-            v-model="accountForm.role"
+            v-model="accountForm.roles"
+            clearable
+            multiple
             placeholder="选择权限角色"
             style="width: 100%;"
           >
             <el-option
               v-for="option in roles"
               :key="option.id"
-              :value="option.id"
+              :value="option.value"
               :label="option.name"
             >
               <span>{{option.name}}</span>
@@ -321,7 +333,7 @@
 
 <script>
 import Status from '@/components/Status';
-import { getRoles } from '@/api/admin/roles';
+import { getRoles } from '@/api/admin-menus/roles';
 import { getAccounts, createAndEditAccount, delAccounts, updateAccount } from '@/api/admin/accounts';
 
 export default {
@@ -368,6 +380,7 @@ export default {
         role: '',
         roleName: '',
         roles: [],
+        rolesShow: [],
       },
       rules: {
         username: [
@@ -379,7 +392,7 @@ export default {
         nickname: [
           { required: true, message: '昵称不能为空' },
         ],
-        role: [
+        roles: [
           { required: true, message: '选择用户角色' },
         ],
         status: [
@@ -530,7 +543,7 @@ export default {
     },
     // 编辑用户
     handleEdit(account) {
-      const { id, username, password, nickname, status = '1', isSuperAdmin, role, roleName, roles = [] } = account;
+      const { id, username, password, nickname, status = '1', isSuperAdmin, role, roleName, roles = [], rolesShow = [] } = account;
       this.accountForm = {
         id,
         username,
@@ -541,6 +554,7 @@ export default {
         role,
         roleName,
         roles,
+        rolesShow,
       };
       this.actionType = 'edit';
       this.dialogVisible = true;
@@ -607,6 +621,7 @@ export default {
         role: '',
         roleName: '',
         roles: [],
+        rolesShow: [],
       };
       this.$refs[formName].resetFields();
     },
@@ -657,9 +672,12 @@ export default {
         if (valid) {
           try {
             this.submitting = true;
-            // 获取权限角色名称
-            const role = this.roles.find(item => item.id === this.accountForm.role);
-            this.accountForm.roleName = role.name;
+            // 获取用于列表显示的权限角色列表
+            /* eslint-disable */
+            this.accountForm.rolesShow = this.roles.filter((role) => {
+              return this.accountForm.roles.includes(role.value);
+            });
+            /* eslint-disable */
             const data = { ...this.accountForm };
             // 如果是添加菜单, 删除对象 id
             if (this.actionType !== 'edit') {
@@ -708,6 +726,14 @@ export default {
     }
     .el-input--suffix .el-input__inner {
       padding-left: 10px;
+    }
+  }
+
+  .roles-list {
+    text-align: left;
+
+    .el-tag {
+      margin: 0 5px;
     }
   }
 }
