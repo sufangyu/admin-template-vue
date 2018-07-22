@@ -150,7 +150,7 @@
                     {{role.name || role.value || '-'}}
                   </el-tag>
                 </div>
-                <span v-else>-</span>
+                <span v-if="!scope.row.roles || scope.row.roles.length === 0">-</span>
               </template>
             </el-table-column>
 
@@ -266,6 +266,7 @@
             v-model="accountForm.roles"
             clearable
             multiple
+            :multiple-limit="1"
             placeholder="选择权限角色"
             style="width: 100%;"
           >
@@ -730,7 +731,7 @@ export default {
   }
 
   .roles-list {
-    text-align: left;
+    text-align: center;
 
     .el-tag {
       margin: 0 5px;
