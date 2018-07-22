@@ -1,8 +1,16 @@
 <template>
   <div class="page-info" v-if="resTitle || resDesc || resExtra">
     <h1 class="title" v-if="resTitle">{{resTitle}}</h1>
-    <div class="desc" v-if="resDesc"><p>{{resDesc}}</p></div>
-    <div class="extra" slot="extra" v-if="resExtra">{{resExtra}}</div>
+    <div class="desc" v-if="resDesc">
+      <slot name="desc">
+        <p>{{resDesc}}</p>
+      </slot>
+    </div>
+    <div class="extra" v-if="resExtra">
+      <slot name="extra">
+        {{resExtra}}
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -12,9 +20,6 @@ export default {
     title: '',
     desc: '',
     extra: '',
-  },
-  created() {
-    this.getPageInfo();
   },
   data() {
     return {
@@ -27,6 +32,9 @@ export default {
     $route() {
       this.getPageInfo();
     },
+  },
+  created() {
+    this.getPageInfo();
   },
   methods: {
     getPageInfo() {
@@ -50,14 +58,18 @@ export default {
   }
   .desc {
     font-size: 14px;
-    line-height: 1;
+    line-height: 1.2;
     color: rgba(0, 0, 0, .65);
     margin-bottom: 16px;
 
     p {
       margin: 0;
-      padding-bottom: 16px;
     }
+  }
+
+  .extra {
+    color: rgba(0, 0, 0, .55);
+    margin-bottom: 16px;
   }
 }
 </style>

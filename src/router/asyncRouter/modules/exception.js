@@ -18,8 +18,6 @@ export default {
       component: () => import('@/views/exception/index'),
       meta: {
         title: '请求异常',
-        breadcrumb: false,
-        pageInfo: false,
       },
     },
     {
@@ -28,8 +26,7 @@ export default {
       component: () => import('@/views/exception/401'),
       meta: {
         title: '401',
-        breadcrumb: false,
-        pageInfo: false,
+        pageHeader: [],
       },
     },
     {
@@ -38,8 +35,7 @@ export default {
       component: () => import('@/views/exception/404'),
       meta: {
         title: '404',
-        breadcrumb: false,
-        pageInfo: false,
+        pageHeader: [],
       },
     },
     {
@@ -48,8 +44,7 @@ export default {
       component: () => import('@/views/exception/500'),
       meta: {
         title: '500',
-        breadcrumb: false,
-        pageInfo: false,
+        pageHeader: [],
       },
     },
   ],

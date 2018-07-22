@@ -1,8 +1,8 @@
 <template>
   <section class="app-layout-body">
-    <div class="page-header">
-      <breadcrumb class="page-breadcrumb" />
-      <page-info />
+    <div class="page-header" v-if="pageHeader.length > 1">
+      <breadcrumb v-if="pageHeader.includes('breadcrumb')" class="page-breadcrumb" />
+      <page-info v-if="pageHeader.includes('pageInfo')" />
     </div>
     <div class="page-content">
       <!-- name=fade/fade-transform -->
@@ -25,6 +25,11 @@ export default {
     Breadcrumb,
     PageInfo,
   },
+  data() {
+    return {
+      pageHeader: ['breadcrumb', 'pageInfo'],
+    };
+  },
   computed: {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews;
@@ -35,6 +40,26 @@ export default {
       }
 
       return this.$route + +new Date();
+    },
+  },
+  watch: {
+    $route() {
+      this.getRouteMeta();
+    },
+  },
+  created() {
+    this.getRouteMeta();
+  },
+  methods: {
+    getRouteMeta() {
+      const matched = this.$route.matched.filter(item => item.name);
+      const first = matched[matched.length - 1].meta;
+      // 是否显示整个页面信息
+      if (first.pageHeader && first.pageHeader.constructor !== Array) {
+        console.warn(`${first.title}'s pageHeader config was't array`);
+      } else if (first.pageHeader !== undefined) {
+        this.pageHeader = first.pageHeader;
+      }
     },
   },
 };

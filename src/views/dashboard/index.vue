@@ -39,7 +39,6 @@ export default {
       }
     }
 
-    console.log(currentRoleComp);
     this.currentRoleComp = currentRoleComp || 'unmatchDashboard';
   },
 };
