@@ -44,6 +44,8 @@ export default {
   },
   watch: {
     $route() {
+      // 初始化赋值
+      this.pageHeader = ['breadcrumb', 'pageInfo'];
       this.getRouteMeta();
     },
   },
@@ -67,7 +69,7 @@ export default {
 
 <style lang="scss">
 .app-layout-body {
-  height: calc(100% - 64px);
+  height: calc(100% - 64px - 40px);
   overflow-y: auto;
   overflow-x: hidden;
 }

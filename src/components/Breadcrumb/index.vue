@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import config from '@/config';
+
 export default {
   created() {
     this.getBreadcrumb();
@@ -52,7 +54,7 @@ export default {
         // return item.name && item.meta.title !== this.$route.matched[index - 1].meta.title;
       });
       const first = matched[0];
-      if (first && first.name !== 'dashboard') {
+      if (first && first.name !== config.HOME_ROUTE.name) {
         matched = [].concat(matched);
       }
       this.levelList = matched;

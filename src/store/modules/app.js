@@ -1,14 +1,14 @@
 import Cookies from 'js-cookie';
 
 const LANGUAGE_CODE_KEY = 'language';
-const SIDEBAR_IS_CLOSED__KEY = 'sidebar-closed';
+const SIDEBAR_IS_CLOSED_KEY = 'sidebar-closed';
 
 const app = {
   state: {
     device: 'desktop',
     language: Cookies.get(LANGUAGE_CODE_KEY) || 'zh',
     sidebar: {
-      opened: !+Cookies.get(SIDEBAR_IS_CLOSED__KEY),
+      opened: !+Cookies.get(SIDEBAR_IS_CLOSED_KEY),
       withoutAnimation: false,
     },
   },
@@ -43,20 +43,20 @@ const app = {
     TOGGLE_SIDEBAR: (state) => {
       // sidebarStatus =>>  1: 隐藏; 0: 显示
       if (state.sidebar.opened) {
-        Cookies.set(SIDEBAR_IS_CLOSED__KEY, 1);
+        Cookies.set(SIDEBAR_IS_CLOSED_KEY, 1);
       } else {
-        Cookies.set(SIDEBAR_IS_CLOSED__KEY, 0);
+        Cookies.set(SIDEBAR_IS_CLOSED_KEY, 0);
       }
       state.sidebar.opened = !state.sidebar.opened;
       state.sidebar.withoutAnimation = false;
     },
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
-      Cookies.set(SIDEBAR_IS_CLOSED__KEY, 1);
+      Cookies.set(SIDEBAR_IS_CLOSED_KEY, 1);
       state.sidebar.opened = false;
       state.sidebar.withoutAnimation = withoutAnimation;
     },
     OPEN_SIDEBAR: (state, withoutAnimation) => {
-      Cookies.set(SIDEBAR_IS_CLOSED__KEY, 0);
+      Cookies.set(SIDEBAR_IS_CLOSED_KEY, 0);
       state.sidebar.opened = true;
       state.sidebar.withoutAnimation = withoutAnimation;
     },

@@ -78,6 +78,7 @@
         </div>
       </div>
     </header>
+    <tags-view></tags-view>
   </div>
 </template>
 
@@ -88,6 +89,7 @@ import Fullscreen from '@/components/Fullscreen';
 import config from '@/config';
 import Hamburger from './Hamburger';
 import Messages from './Messages';
+import TagsView from './TagsView';
 
 export default {
   name: 'appHeader',
@@ -96,6 +98,7 @@ export default {
     Hamburger,
     Fullscreen,
     Messages,
+    TagsView,
   },
   data() {
     return {
@@ -151,11 +154,11 @@ export default {
   position: relative;
   z-index: 100;
   background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .header {
     height: $app-header-height;
     line-height: $app-header-height;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
     display: flex;
     align-items: center;
 
@@ -224,7 +227,7 @@ export default {
       position: absolute;
       right: 20px;
       top: 0;
-      height: 100%;
+      height: $app-header-height;
       color: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;

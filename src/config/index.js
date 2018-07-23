@@ -12,4 +12,11 @@ export default {
   PERMISSION_TYPE: 'roles',
   // 是否异步匹配路由角色信息
   IS_ASYNC_ROUTER_ROLES: true,
+
+  // 首页路由配置
+  HOME_ROUTE: {
+    name: 'dashboard',
+    path: '/dashboard',
+    title: '控制台',
+  },
 };
