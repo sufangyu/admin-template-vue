@@ -225,7 +225,7 @@ export default {
 
     .header-right {
       position: absolute;
-      right: 20px;
+      right: 10px;
       top: 0;
       height: $app-header-height;
       color: rgba(0, 0, 0, 0.5);
