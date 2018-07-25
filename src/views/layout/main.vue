@@ -51,11 +51,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/styles/mixin.scss";
-@import "src/styles/var.scss";
-// $app-header-height : 64px;
-// $sidebar-width     : 236px;
-// $sidebar-width-min : 80px;
+@import "~@/styles/var.scss";
+@import "~@/styles/mixin.scss";
 
 .app-layout {
   @include clearfix;

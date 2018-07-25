@@ -148,7 +148,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../../../styles/var.scss';
+@import '~@/styles/var.scss';
 
 .app-layout-header {
   position: relative;
