@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const UUID = require('uuid');
-const jsonServer = require('../node_modules/_json-server@0.14.0@json-server');
+const jsonServer = require('json-server');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
